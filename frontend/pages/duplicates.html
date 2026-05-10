@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Duplicates</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .duplicates-hero { padding: 44px 0 24px; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .summary-card,
+    .toolbar-card,
+    .duplicate-group,
+    .empty-state {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+
+    .summary-card {
+      padding: 18px;
+    }
+
+    .summary-label {
+      color: var(--text3);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .summary-value {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .summary-subtext {
+      color: var(--text2);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .toolbar-card {
+      padding: 18px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .toolbar-meta {
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .info-banner {
+      margin-bottom: 20px;
+      padding: 15px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(124,108,252,0.2);
+      background: rgba(124,108,252,0.1);
+      color: var(--text2);
+    }
+
+    .groups-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding-bottom: 36px;
+    }
+
+    .duplicate-group {
+      overflow: hidden;
+    }
+
+    .group-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap;
+    }
+
+    .group-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .group-meta {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .group-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--bg3);
+      color: var(--text2);
+    }
+
+    .badge-match {
+      background: rgba(124,108,252,0.14);
+      border-color: rgba(124,108,252,0.28);
+      color: #cec7ff;
+    }
+
+    .badge-score {
+      background: rgba(52,211,153,0.12);
+      border-color: rgba(52,211,153,0.28);
+      color: #b5f5d7;
+    }
+
+    .group-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .duplicate-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: border-color .18s ease, transform .18s ease;
+    }
+
+    .duplicate-card.selected {
+      border-color: rgba(124,108,252,0.42);
+      transform: translateY(-1px);
+    }
+
+    .duplicate-preview {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .duplicate-preview img {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      display: block;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .duplicate-checkbox {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+    }
+
+    .duplicate-card-body {
+      padding: 14px;
+    }
+
+    .duplicate-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .duplicate-meta {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.45;
+      min-height: 58px;
+    }
+
+    .duplicate-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .duplicate-card-actions .btn {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .recommended-keep {
+      display: inline-flex;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(250,204,21,0.12);
+      border: 1px solid rgba(250,204,21,0.25);
+      color: #f7d879;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 24px;
+      color: var(--text2);
+    }
+
+    .empty-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(3,3,7,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 24px;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-img {
+      max-width: min(92vw, 980px);
+      max-height: 78vh;
+      object-fit: contain;
+      border-radius: 18px;
+      background: #0c0c12;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 28px;
+      right: 28px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(12,12,18,0.84);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .lightbox-info {
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      min-width: min(88vw, 520px);
+      text-align: center;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(12,12,18,0.88);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .lightbox-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .lightbox-meta {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 700px) {
+      .group-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link" href="search.html">Search</a>
+      <a class="nav-link" href="events.html">Events</a>
+      <a class="nav-link" href="timeline.html">Timeline</a>
+      <a class="nav-link active" href="duplicates.html">Duplicates</a>
+      <a class="nav-link" href="admin-health.html">Health</a>
+    </div>
+    <div class="nav-user">
+      <span id="nav-username"></span>
+      <div class="avatar" id="nav-avatar" onclick="clearToken()">U</div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="duplicates-hero">
+      <h1 class="page-title">Duplicates</h1>
+      <p class="page-subtitle">Review exact and similar duplicate photos, keep the best copy, and move the extras to trash.</p>
+    </section>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Duplicate Groups</div>
+        <div class="summary-value" id="summary-groups">0</div>
+        <div class="summary-subtext">Exact and similar duplicate clusters found</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Duplicate Photos</div>
+        <div class="summary-value" id="summary-photos">0</div>
+        <div class="summary-subtext">Photos currently inside duplicate groups</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Can Reclaim</div>
+        <div class="summary-value" id="summary-reclaim">0</div>
+        <div class="summary-subtext">Extra copies you can safely remove</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Need Scan</div>
+        <div class="summary-value" id="summary-unhashed">0</div>
+        <div class="summary-subtext">Existing photos without duplicate fingerprints yet</div>
+      </div>
+    </section>
+
+    <section class="toolbar-card">
+      <div class="toolbar-actions">
+        <button class="btn btn-secondary" id="scan-btn">Scan Library</button>
+        <button class="btn btn-danger" id="trash-selected-btn">Trash Selected</button>
+      </div>
+      <div class="toolbar-meta" id="selection-meta">No duplicate photos selected</div>
+    </section>
+
+    <div class="info-banner" id="duplicates-banner">
+      Exact duplicates use file hashes. Similar duplicates now use perceptual hashing inside the same scene to catch re-saved copies more safely.
+    </div>
+
+    <section class="groups-list" id="duplicates-groups"></section>
+  </div>
+
+  <div class="lightbox" id="duplicates-lightbox" onclick="closeLightbox(event)">
+    <img class="lightbox-img" id="duplicates-lightbox-img" alt=""/>
+    <button class="lightbox-close" onclick="closeLightbox(event)">Close</button>
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="duplicates-lightbox-title"></div>
+      <div class="lightbox-meta" id="duplicates-lightbox-meta"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/duplicates.js"></script>
+</body>
+</html>

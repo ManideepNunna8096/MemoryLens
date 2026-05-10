@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Sign In</title>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+
+    .auth-wrap {
+      width: 100%; max-width: 420px; padding: 24px;
+    }
+
+    .auth-logo {
+      text-align: center; margin-bottom: 36px;
+    }
+    .auth-logo h1 {
+      font-family: var(--font-head); font-size: 36px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .auth-logo p { color: var(--text3); font-size: 14px; margin-top: 4px; }
+
+    .auth-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px;
+    }
+
+    .tab-row {
+      display: flex; background: var(--bg3);
+      border-radius: 10px; padding: 4px; margin-bottom: 28px;
+    }
+    .tab {
+      flex: 1; text-align: center; padding: 8px;
+      border-radius: 8px; cursor: pointer;
+      font-size: 14px; font-weight: 500; color: var(--text2);
+      transition: all 0.2s;
+    }
+    .tab.active { background: var(--accent); color: white; }
+
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+
+    .btn-full { width: 100%; justify-content: center; margin-top: 8px; }
+
+    .bg-orbs {
+      position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.12;
+    }
+    .orb1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
+    .orb2 { width: 300px; height: 300px; background: var(--accent2); bottom: -80px; right: -80px; }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+  </div>
+
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <h1>MemoryLens</h1>
+      <p>AI-powered photo organizer</p>
+    </div>
+
+    <div class="auth-box">
+      <div class="tab-row">
+        <div class="tab active" onclick="switchTab('login')">Sign In</div>
+        <div class="tab" onclick="switchTab('register')">Register</div>
+      </div>
+
+      <div class="form-section active" id="login-form">
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input class="input" type="email" id="login-email" placeholder="you@example.com"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <input class="input" type="password" id="login-password" placeholder="********"/>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="handleLogin()">
+          <span id="login-btn-text">Sign In</span>
+        </button>
+      </div>
+
+      <div class="form-section" id="register-form">
+        <div class="input-group">
+          <label class="input-label">Full Name</label>
+          <input class="input" type="text" id="reg-name" placeholder="Your Name"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input class="input" type="email" id="reg-email" placeholder="you@example.com"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <input class="input" type="password" id="reg-password" placeholder="8+ chars, mixed case, number"/>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="handleRegister()">
+          <span id="reg-btn-text">Create Account</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

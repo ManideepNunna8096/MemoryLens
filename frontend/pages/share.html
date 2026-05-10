@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Shared Album</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .share-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 96px 24px 40px;
+    }
+
+    .share-hero {
+      background: linear-gradient(135deg, rgba(124,108,252,0.16), rgba(192,132,252,0.08));
+      border: 1px solid rgba(124,108,252,0.3);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .share-hero h1 {
+      font-family: var(--font-head);
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .share-hero p {
+      color: var(--text2);
+      max-width: 720px;
+    }
+
+    .share-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .share-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .share-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .share-card img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .share-card-body {
+      padding: 12px;
+    }
+
+    .share-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .share-card-meta {
+      font-size: 12px;
+      color: var(--text3);
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link" href="search.html">Search</a>
+      <a class="nav-link" href="events.html">Events</a>
+    </div>
+    <div class="nav-user">
+      <span>Shared view</span>
+    </div>
+  </nav>
+
+  <main class="share-shell">
+    <section class="share-hero" id="share-hero">
+      <div class="spinner" style="margin-bottom:12px"></div>
+      Loading shared photos...
+    </section>
+    <section class="share-grid" id="share-grid"></section>
+  </main>
+
+  <div class="toast-container"></div>
+  <script src="../js/api.js"></script>
+  <script src="../js/share.js"></script>
+</body>
+</html>

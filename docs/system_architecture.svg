@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #1e1e2f; }
+      .label { font: 600 18px 'Segoe UI', Arial, sans-serif; fill: #ffffff; }
+      .text { font: 15px 'Segoe UI', Arial, sans-serif; fill: #eef1ff; }
+      .small { font: 14px 'Segoe UI', Arial, sans-serif; fill: #22253a; }
+      .arrow { stroke: #5f63ff; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .thin { stroke: #888db8; stroke-width: 2; fill: none; marker-end: url(#arrowhead2); }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5f7ff"/>
+      <stop offset="100%" stop-color="#eef0ff"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7b61ff"/>
+      <stop offset="100%" stop-color="#4b3dd6"/>
+    </linearGradient>
+    <linearGradient id="back" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f2340"/>
+      <stop offset="100%" stop-color="#121529"/>
+    </linearGradient>
+    <linearGradient id="db" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f8f68"/>
+      <stop offset="100%" stop-color="#0f5d43"/>
+    </linearGradient>
+    <linearGradient id="ml" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f08d35"/>
+      <stop offset="100%" stop-color="#cf5a0f"/>
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#5f63ff"/>
+    </marker>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#888db8"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#bg)"/>
+  <text x="700" y="55" text-anchor="middle" class="title">MemoryLens System Architecture</text>
+
+  <rect x="70" y="110" rx="24" ry="24" width="250" height="120" fill="url(#front)"/>
+  <text x="195" y="155" text-anchor="middle" class="label">User Browser</text>
+  <text x="195" y="188" text-anchor="middle" class="text">Login, Gallery, Upload,</text>
+  <text x="195" y="212" text-anchor="middle" class="text">Search, Timeline, Events</text>
+
+  <rect x="430" y="85" rx="28" ry="28" width="370" height="180" fill="url(#front)"/>
+  <text x="615" y="130" text-anchor="middle" class="label">Frontend Layer</text>
+  <text x="615" y="165" text-anchor="middle" class="text">Static HTML pages</text>
+  <text x="615" y="192" text-anchor="middle" class="text">CSS-based UI styling</text>
+  <text x="615" y="219" text-anchor="middle" class="text">JavaScript page controllers</text>
+  <text x="615" y="246" text-anchor="middle" class="text">api.js for JWT and API calls</text>
+
+  <rect x="930" y="65" rx="30" ry="30" width="360" height="220" fill="url(#back)"/>
+  <text x="1110" y="110" text-anchor="middle" class="label">Flask Backend</text>
+  <text x="1110" y="145" text-anchor="middle" class="text">App factory, JWT auth, CORS,</text>
+  <text x="1110" y="172" text-anchor="middle" class="text">SQLAlchemy, Migrations, Logging</text>
+  <text x="1110" y="207" text-anchor="middle" class="text">Blueprints:</text>
+  <text x="1110" y="234" text-anchor="middle" class="text">auth, photos, search, timeline,</text>
+  <text x="1110" y="261" text-anchor="middle" class="text">events, duplicates, folders, admin</text>
+
+  <rect x="870" y="380" rx="28" ry="28" width="300" height="180" fill="url(#db)"/>
+  <text x="1020" y="425" text-anchor="middle" class="label">PostgreSQL + pgvector</text>
+  <text x="1020" y="462" text-anchor="middle" class="text">Users, Photos, Events, Jobs</text>
+  <text x="1020" y="489" text-anchor="middle" class="text">Vector embeddings in photos</text>
+  <text x="1020" y="516" text-anchor="middle" class="text">Similarity search with pgvector</text>
+  <text x="1020" y="543" text-anchor="middle" class="text">Relational integrity and metadata</text>
+
+  <rect x="1210" y="380" rx="28" ry="28" width="140" height="180" fill="url(#db)"/>
+  <text x="1280" y="432" text-anchor="middle" class="label" font-size="16">File Store</text>
+  <text x="1280" y="470" text-anchor="middle" class="text">uploads/</text>
+  <text x="1280" y="497" text-anchor="middle" class="text">image files</text>
+  <text x="1280" y="524" text-anchor="middle" class="text">backups/</text>
+
+  <rect x="505" y="365" rx="28" ry="28" width="280" height="210" fill="url(#ml)"/>
+  <text x="645" y="410" text-anchor="middle" class="label">AI and Processing Layer</text>
+  <text x="645" y="447" text-anchor="middle" class="text">CLIP embeddings</text>
+  <text x="645" y="474" text-anchor="middle" class="text">ResNet-18 Places365 scene labels</text>
+  <text x="645" y="501" text-anchor="middle" class="text">Duplicate hashes</text>
+  <text x="645" y="528" text-anchor="middle" class="text">Event album matching</text>
+  <text x="645" y="555" text-anchor="middle" class="text">Background job processing</text>
+
+  <rect x="145" y="420" rx="28" ry="28" width="250" height="160" fill="#ffffff" stroke="#cfd3f8" stroke-width="2"/>
+  <text x="270" y="460" text-anchor="middle" class="small" style="font-weight:700">User Flows</text>
+  <text x="270" y="495" text-anchor="middle" class="small">1. Login / Register</text>
+  <text x="270" y="522" text-anchor="middle" class="small">2. Upload photo</text>
+  <text x="270" y="549" text-anchor="middle" class="small">3. Search / Browse / Organize</text>
+
+  <path d="M320 170 L430 170" class="arrow"/>
+  <path d="M800 170 L930 170" class="arrow"/>
+  <path d="M1030 285 L1030 380" class="arrow"/>
+  <path d="M1180 285 L1245 380" class="arrow"/>
+  <path d="M785 470 L870 470" class="arrow"/>
+  <path d="M615 265 L645 365" class="arrow"/>
+  <path d="M505 470 L395 500" class="thin"/>
+  <path d="M930 520 L780 555" class="thin"/>
+  <path d="M1210 470 L1170 470" class="thin"/>
+
+  <rect x="80" y="700" rx="24" ry="24" width="1240" height="120" fill="#ffffff" stroke="#d6daf7" stroke-width="2"/>
+  <text x="700" y="742" text-anchor="middle" class="small" style="font-weight:700">Core End-to-End Flow</text>
+  <text x="700" y="775" text-anchor="middle" class="small">User uploads image -> Flask stores file and photo row -> background task generates embedding, scene, hashes -> PostgreSQL stores metadata and vector -> frontend refreshes gallery, search, timeline, events, and duplicates.</text>
+</svg>

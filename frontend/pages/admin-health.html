@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Health</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .health-hero {
+      padding: 44px 0 18px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .health-hero-copy {
+      max-width: 720px;
+    }
+
+    .health-hero-copy p {
+      color: var(--text2);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .health-summary {
+      margin-top: 14px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .health-card,
+    .health-panel,
+    .health-json {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+
+    .health-card {
+      padding: 18px;
+    }
+
+    .health-card-label {
+      color: var(--text3);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .health-card-value {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .health-card-value.large {
+      font-size: 28px;
+    }
+
+    .health-card-copy,
+    .health-model-subtitle,
+    .health-panel-copy {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .health-note {
+      margin-top: 10px;
+      color: var(--text3);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .health-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 18px;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .health-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .is-good {
+      background: rgba(34,197,94,0.12);
+      color: #86efac;
+      border-color: rgba(34,197,94,0.24);
+    }
+
+    .is-warn {
+      background: rgba(245,158,11,0.12);
+      color: #fcd34d;
+      border-color: rgba(245,158,11,0.24);
+    }
+
+    .is-bad {
+      background: rgba(239,68,68,0.12);
+      color: #fca5a5;
+      border-color: rgba(239,68,68,0.24);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      color: var(--text3);
+      font-size: 12px;
+    }
+
+    .health-panel {
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .health-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .health-panel + .health-panel {
+      margin-top: 14px;
+    }
+
+    .health-model-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .health-model {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+    }
+
+    .health-model-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .health-json {
+      padding: 18px;
+      overflow: auto;
+    }
+
+    .health-json pre {
+      margin: 0;
+      color: var(--text2);
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 900px) {
+      .metric-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .metric-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link" href="search.html">Search</a>
+      <a class="nav-link" href="events.html">Events</a>
+      <a class="nav-link" href="timeline.html">Timeline</a>
+      <a class="nav-link" href="duplicates.html">Duplicates</a>
+      <a class="nav-link active" href="admin-health.html">Health</a>
+    </div>
+    <div class="nav-user">
+      <span id="nav-username"></span>
+      <div class="avatar" id="nav-avatar" onclick="clearToken()">U</div>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+      <div class="health-hero">
+        <div class="health-hero-copy">
+          <h1 class="page-title">System Health</h1>
+          <p class="page-subtitle">A quick reviewer-friendly snapshot of PostgreSQL, pgvector, and model readiness.</p>
+          <p>Use this page before a demo to confirm the backend is connected, the vector layer is active, and the image models are ready to process uploads and search queries.</p>
+          <div class="health-summary" id="health-summary">Checking system status...</div>
+        </div>
+        <div class="health-row">
+          <button class="btn btn-primary" id="refresh-health">Refresh</button>
+          <span class="health-pill" id="health-status">Checking...</span>
+        </div>
+      </div>
+
+      <div class="status-strip" id="status-strip"></div>
+
+      <div class="health-grid">
+        <section class="health-card">
+          <div class="health-card-label">Database</div>
+          <div class="health-card-value large" id="db-dialect">loading</div>
+          <div class="health-card-copy">PostgreSQL is the only runtime database for MemoryLens.</div>
+          <div class="metric-row" id="db-counts"></div>
+          <div class="health-note" id="health-note"></div>
+        </section>
+
+        <section class="health-card">
+          <div class="health-card-label">Vector Layer</div>
+          <div class="health-card-value" id="vector-pill">loading</div>
+          <div class="health-card-copy" id="vector-copy"></div>
+        </section>
+
+      </div>
+
+      <section class="health-panel">
+        <div class="health-panel-header">
+          <div>
+            <div class="health-card-label">Model readiness</div>
+            <div class="health-panel-copy">These checks tell you whether the models are ready to use or simply need to warm up the first time they are called.</div>
+          </div>
+          <span id="health-last-updated" class="health-panel-copy"></span>
+        </div>
+        <div class="health-model-list" id="models-list"></div>
+      </section>
+
+      <section class="health-panel">
+        <div class="health-panel-header">
+          <div>
+            <div class="health-card-label">Backup</div>
+            <div class="health-panel-copy">Create a fresh PostgreSQL backup whenever you want a safe checkpoint.</div>
+          </div>
+          <span class="health-pill" id="backup-pill">Checking</span>
+        </div>
+        <div class="health-card" style="margin-top:14px;">
+          <div class="health-card-label">Last backup</div>
+          <div class="health-card-value" id="backup-summary">Loading</div>
+          <div class="health-note" id="backup-modified"></div>
+          <div class="health-row" style="margin-top:14px;">
+            <button class="btn btn-primary" id="run-backup">Run Backup</button>
+            <button class="btn btn-ghost" id="refresh-health-inline">Refresh</button>
+          </div>
+          <div class="health-note" id="backup-action-status"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+  <script src="../js/api.js?v=20260422b"></script>
+  <script src="../js/admin_health.js?v=20260422b"></script>
+</body>
+</html>

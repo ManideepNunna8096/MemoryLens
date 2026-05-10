@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #1e1e2f; }
+      .head { font: 700 22px 'Segoe UI', Arial, sans-serif; fill: #ffffff; }
+      .field { font: 15px 'Consolas', 'Courier New', monospace; fill: #20243a; }
+      .note { font: 15px 'Segoe UI', Arial, sans-serif; fill: #ffffff; }
+      .arrow { stroke: #665cff; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f8ff"/>
+      <stop offset="100%" stop-color="#edf0ff"/>
+    </linearGradient>
+    <linearGradient id="tbl" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7b61ff"/>
+      <stop offset="100%" stop-color="#4a3ed8"/>
+    </linearGradient>
+    <linearGradient id="tbl2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1d2240"/>
+      <stop offset="100%" stop-color="#12152a"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#665cff"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#bg)"/>
+  <text x="700" y="55" text-anchor="middle" class="title">MemoryLens Database Schema</text>
+
+  <g transform="translate(90,120)">
+    <rect width="290" height="260" rx="24" ry="24" fill="#ffffff" stroke="#d4d8f8" stroke-width="2"/>
+    <rect width="290" height="58" rx="24" ry="24" fill="url(#tbl)"/>
+    <text x="145" y="37" text-anchor="middle" class="head">users</text>
+    <text x="20" y="92" class="field">PK  id</text>
+    <text x="20" y="118" class="field">name</text>
+    <text x="20" y="144" class="field">email (unique)</text>
+    <text x="20" y="170" class="field">password</text>
+    <text x="20" y="196" class="field">created_at</text>
+    <text x="20" y="234" class="field">Relationships:</text>
+    <text x="20" y="256" class="field">1 user -> many photos, events, jobs</text>
+  </g>
+
+  <g transform="translate(450,120)">
+    <rect width="420" height="470" rx="24" ry="24" fill="#ffffff" stroke="#d4d8f8" stroke-width="2"/>
+    <rect width="420" height="58" rx="24" ry="24" fill="url(#tbl2)"/>
+    <text x="210" y="37" text-anchor="middle" class="head">photos</text>
+    <text x="20" y="92" class="field">PK  id</text>
+    <text x="20" y="118" class="field">filename</text>
+    <text x="20" y="144" class="field">original_filename</text>
+    <text x="20" y="170" class="field">scene</text>
+    <text x="20" y="196" class="field">clip_vector_pg</text>
+    <text x="20" y="222" class="field">clip_model_version</text>
+    <text x="20" y="248" class="field">scene_model_version</text>
+    <text x="20" y="274" class="field">processing_status</text>
+    <text x="20" y="300" class="field">processing_error</text>
+    <text x="20" y="326" class="field">captured_at</text>
+    <text x="20" y="352" class="field">display_name</text>
+    <text x="20" y="378" class="field">custom_folder</text>
+    <text x="20" y="404" class="field">sha256_hash</text>
+    <text x="220" y="92" class="field">dhash</text>
+    <text x="220" y="118" class="field">is_favorite</text>
+    <text x="220" y="144" class="field">is_archived</text>
+    <text x="220" y="170" class="field">trashed_at</text>
+    <text x="220" y="196" class="field">FK  user_id -> users.id</text>
+    <text x="220" y="222" class="field">FK  event_id -> events.id</text>
+    <text x="220" y="248" class="field">uploaded_at</text>
+    <text x="220" y="286" class="field">Indexes:</text>
+    <text x="220" y="312" class="field">sha256_hash, dhash</text>
+    <text x="220" y="338" class="field">Vector search via pgvector</text>
+  </g>
+
+  <g transform="translate(940,140)">
+    <rect width="300" height="220" rx="24" ry="24" fill="#ffffff" stroke="#d4d8f8" stroke-width="2"/>
+    <rect width="300" height="58" rx="24" ry="24" fill="url(#tbl)"/>
+    <text x="150" y="37" text-anchor="middle" class="head">events</text>
+    <text x="20" y="92" class="field">PK  id</text>
+    <text x="20" y="118" class="field">label</text>
+    <text x="20" y="144" class="field">dominant_scene</text>
+    <text x="20" y="170" class="field">FK  user_id -> users.id</text>
+    <text x="20" y="196" class="field">created_at</text>
+  </g>
+
+  <g transform="translate(960,430)">
+    <rect width="320" height="280" rx="24" ry="24" fill="#ffffff" stroke="#d4d8f8" stroke-width="2"/>
+    <rect width="320" height="58" rx="24" ry="24" fill="url(#tbl2)"/>
+    <text x="160" y="37" text-anchor="middle" class="head">jobs</text>
+    <text x="20" y="92" class="field">PK  id (uuid string)</text>
+    <text x="20" y="118" class="field">job_type</text>
+    <text x="20" y="144" class="field">status</text>
+    <text x="20" y="170" class="field">FK  user_id -> users.id</text>
+    <text x="20" y="196" class="field">total_items</text>
+    <text x="20" y="222" class="field">completed_items</text>
+    <text x="20" y="248" class="field">result_payload</text>
+    <text x="20" y="274" class="field">error_message</text>
+    <text x="20" y="300" class="field">created_at, updated_at</text>
+  </g>
+
+  <path d="M380 210 L450 210" class="arrow"/>
+  <path d="M380 280 L450 280" class="arrow"/>
+  <path d="M870 220 L940 220" class="arrow"/>
+  <path d="M870 240 C930 240, 930 240, 980 240" class="arrow"/>
+  <path d="M380 330 C420 330, 420 565, 960 565" class="arrow"/>
+
+  <rect x="90" y="470" width="760" height="250" rx="24" ry="24" fill="#1d2240"/>
+  <text x="470" y="515" text-anchor="middle" class="head">Storage Logic Notes</text>
+  <text x="120" y="560" class="note">• Image binaries are stored in backend/uploads, not inside the database.</text>
+  <text x="120" y="592" class="note">• PostgreSQL stores metadata, ownership, labels, hashes, processing status, and event links.</text>
+  <text x="120" y="624" class="note">• pgvector stores the CLIP embedding in clip_vector_pg for semantic search.</text>
+  <text x="120" y="656" class="note">• Exact duplicates use SHA-256. Near-duplicates use perceptual dHash.</text>
+  <text x="120" y="688" class="note">• jobs tracks long-running upload processing and event organization actions.</text>
+</svg>

@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: memorylens-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: memorylens
+      POSTGRES_USER: memorylens
+      POSTGRES_PASSWORD: memorylens
+    ports:
+      - "5432:5432"
+    volumes:
+      - memorylens_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memorylens -d memorylens"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  memorylens_postgres_data:

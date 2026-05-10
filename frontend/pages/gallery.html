@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Gallery</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .gallery-layout {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .scene-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-self: flex-start;
+    }
+    .gallery-main { flex: 1; min-width: 0; }
+
+    .toolbar-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .collection-tabs,
+    .toolbar-actions,
+    .bulk-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .collection-chip {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .collection-chip.active {
+      color: var(--text);
+      border-color: rgba(124,108,252,0.45);
+      background: rgba(124,108,252,0.16);
+    }
+
+    .toolbar-select {
+      min-width: 200px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+    }
+
+    .bulk-bar {
+      display: none;
+      border-top: 1px solid var(--border);
+      margin-top: 14px;
+      padding-top: 14px;
+    }
+
+    .bulk-bar.active {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .selection-meta {
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .folder-search {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .folder-search .input {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 12px;
+    }
+
+    .sidebar-create-btn {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .folder-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .folder-main {
+      margin-bottom: 0;
+      min-width: 0;
+      min-height: 44px;
+    }
+
+    .folder-actions {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .folder-menu-toggle {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .folder-menu-toggle.active,
+    .folder-menu-toggle:hover {
+      color: var(--text);
+      border-color: rgba(124,108,252,0.35);
+      background: rgba(124,108,252,0.12);
+    }
+
+    .folder-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      z-index: 15;
+      min-width: 170px;
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+      display: none;
+    }
+
+    .folder-menu.open {
+      display: block;
+    }
+
+    .folder-menu button {
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: transparent;
+      color: var(--text2);
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .folder-menu button:hover {
+      background: var(--bg3);
+      color: var(--text);
+    }
+
+    .folder-menu button.danger {
+      color: #fca5a5;
+    }
+
+    .scene-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 4px;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+      background: transparent;
+    }
+
+    .scene-item:hover {
+      background: var(--bg3);
+      color: var(--text);
+    }
+
+    .scene-item.active {
+      background: rgba(124,108,252,0.15);
+      border-color: rgba(124,108,252,0.25);
+      color: var(--accent);
+    }
+
+    .scene-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .scene-count,
+    .mini-flag {
+      font-size: 11px;
+      background: var(--bg3);
+      color: var(--text3);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .mini-flag {
+      background: rgba(255,255,255,0.08);
+      color: var(--text2);
+    }
+
+    .processing-banner {
+      display: none;
+      margin-bottom: 18px;
+      padding: 15px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(251,191,36,0.28);
+      background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(251,191,36,0.04));
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .processing-banner strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .photo-card {
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .photo-card.selected {
+      border-color: rgba(124,108,252,0.6);
+      box-shadow: 0 0 0 1px rgba(124,108,252,0.35);
+    }
+
+    .photo-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-checkbox {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 3;
+      background: rgba(10,10,15,0.82);
+      border: 1px solid var(--border);
+      padding: 5px 6px;
+      border-radius: 9px;
+    }
+
+    .photo-img-wrap {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .photo-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .photo-card:hover img {
+      transform: scale(1.03);
+    }
+
+    .photo-topline {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-content: flex-start;
+      justify-content: flex-end;
+      padding: 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 60%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .photo-card:hover .photo-overlay {
+      opacity: 1;
+    }
+
+    .mini-action {
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(10,10,15,0.82);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .mini-action.danger {
+      color: #fca5a5;
+      border-color: rgba(248,113,113,0.35);
+    }
+
+    .photo-info {
+      padding: 12px;
+    }
+
+    .photo-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .photo-scene {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .photo-meta {
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    .badge-ready { color: var(--success); border-color: rgba(52,211,153,0.4); background: rgba(52,211,153,0.14); }
+    .badge-processing { color: var(--warning); border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.14); }
+    .badge-failed { color: var(--danger); border-color: rgba(248,113,113,0.4); background: rgba(248,113,113,0.14); }
+
+    .gallery-footer {
+      text-align: center;
+      padding: 18px 0 6px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    #gallery-sentinel {
+      height: 1px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 12px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .lightbox-details-btn {
+      position: absolute;
+      top: 20px;
+      right: 112px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .lightbox-info {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    .details-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.46);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 998;
+    }
+
+    .details-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .details-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(420px, 94vw);
+      height: 100vh;
+      z-index: 1000;
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      box-shadow: -18px 0 40px rgba(0,0,0,0.28);
+      transform: translateX(100%);
+      transition: transform 0.24s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .details-panel.open {
+      transform: translateX(0);
+    }
+
+    .details-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 22px 22px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .details-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .details-subtitle {
+      margin-top: 6px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .details-close {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .details-body {
+      padding: 20px 22px 28px;
+      overflow-y: auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .details-preview {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      aspect-ratio: 4/3;
+    }
+
+    .details-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .details-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .details-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .details-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: var(--bg3);
+    }
+
+    .details-label {
+      color: var(--text3);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .details-value {
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .details-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 960px) {
+      .gallery-layout { flex-direction: column; }
+      .scene-sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link active" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link" href="search.html">Search</a>
+      <a class="nav-link" href="events.html">Events</a>
+      <a class="nav-link" href="timeline.html">Timeline</a>
+      <a class="nav-link" href="duplicates.html">Duplicates</a>
+      <a class="nav-link" href="admin-health.html">Health</a>
+    </div>
+    <div class="nav-user">
+      <span id="nav-username"></span>
+      <div class="avatar" id="nav-avatar" onclick="clearToken()">U</div>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+      <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h1 class="page-title">Gallery Workspace</h1>
+          <p class="page-subtitle">Select, rename, sort, share, trash, and organize photos into albums or custom gallery folders.</p>
+        </div>
+        <a class="btn btn-primary" href="upload.html">+ Upload Photos</a>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-value" id="stat-total">-</div><div class="stat-label">All photos</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-ready">-</div><div class="stat-label">Ready folders</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-favorites">-</div><div class="stat-label">Favorites</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-processing">-</div><div class="stat-label">Processing</div></div>
+      </div>
+
+      <div class="toolbar-card">
+        <div class="toolbar-row">
+          <div class="collection-tabs">
+            <button type="button" class="collection-chip active" data-collection="active">Library</button>
+            <button type="button" class="collection-chip" data-collection="favorites">Favorites</button>
+            <button type="button" class="collection-chip" data-collection="trash">Trash</button>
+          </div>
+          <div class="toolbar-actions">
+            <select class="toolbar-select" id="sort-select">
+              <option value="newest">Sort: Newest first</option>
+              <option value="oldest">Sort: Oldest first</option>
+              <option value="scene">Sort: Scene name</option>
+              <option value="processing">Sort: Processing status</option>
+            </select>
+            <select class="toolbar-select" id="move-event-select"></select>
+            <select class="toolbar-select" id="move-folder-select"></select>
+            <button class="btn btn-secondary" onclick="moveSelectedToEvent()">Move to Album</button>
+            <button class="btn btn-secondary" onclick="moveSelectedToFolder()">Move to Folder</button>
+            <button class="btn btn-secondary" onclick="createFolderFromSelection()">New Folder</button>
+            <button class="btn btn-ghost" onclick="toggleSelectVisible()">Select Multiple</button>
+            <button class="btn btn-ghost" onclick="clearSelection()">Clear</button>
+          </div>
+        </div>
+
+        <div class="bulk-bar" id="bulk-bar">
+          <span class="selection-meta" id="selection-meta">No photos selected</span>
+          <div class="bulk-actions">
+            <button class="btn btn-secondary btn-sm" onclick="downloadSelectedPhotos()">Download</button>
+            <button class="btn btn-secondary btn-sm" onclick="shareSelectedPhotos()">Share</button>
+            <button class="btn btn-secondary btn-sm" onclick="favoriteSelectedPhotos()">Favorite</button>
+            <button class="btn btn-secondary btn-sm" onclick="moveSelectedToFolder()">Move to Folder</button>
+            <button class="btn btn-secondary btn-sm" onclick="retrySelectedPhotos()">Retry</button>
+            <button class="btn btn-secondary btn-sm" onclick="restoreSelectedPhotos()">Restore</button>
+            <button class="btn btn-secondary btn-sm" onclick="trashSelectedPhotos()">Trash</button>
+            <button class="btn btn-ghost btn-sm" onclick="deleteSelectedPhotos()">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-layout">
+        <div class="scene-sidebar">
+          <div class="sidebar-header">
+            <div class="sidebar-title">Gallery folders</div>
+            <button type="button" class="sidebar-create-btn" onclick="createFolderFromSelection()">+ New</button>
+          </div>
+          <div class="folder-search">
+            <input class="input" id="folder-search-input" type="search" placeholder="Search folders by name..."/>
+          </div>
+          <div class="folder-row">
+            <button type="button" class="scene-item folder-main active" id="scene-all" onclick="filterScene(null)">
+              <span class="scene-label">All Library</span>
+              <span class="scene-count" id="all-count">0</span>
+            </button>
+          </div>
+          <div id="scene-list"></div>
+        </div>
+
+        <div class="gallery-main">
+          <div class="processing-banner" id="processing-banner">
+            <strong id="processing-title">Photos are still processing</strong>
+            <span id="processing-copy">This page will refresh automatically until they are ready.</span>
+          </div>
+
+          <div class="gallery-grid" id="gallery-grid">
+            <div style="grid-column:1/-1;padding:60px 0;text-align:center;color:var(--text3)">
+              <div class="spinner" style="margin:0 auto 12px"></div>
+              Loading photos...
+            </div>
+          </div>
+
+          <div class="gallery-footer">
+            <div id="gallery-status"></div>
+            <div id="gallery-sentinel"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <img class="lightbox-img" id="lightbox-img" src="" alt=""/>
+    <button class="lightbox-details-btn" onclick="openDetailsFromLightbox(event)">Details</button>
+    <button class="lightbox-close" onclick="closeLightbox()">Close</button>
+    <div class="lightbox-info">
+      <div id="lightbox-scene" style="font-weight:500"></div>
+      <div id="lightbox-date" style="font-size:12px;color:var(--text3);margin-top:3px"></div>
+    </div>
+  </div>
+
+  <div class="details-backdrop" id="details-backdrop" onclick="closeDetailsPanel()"></div>
+  <aside class="details-panel" id="details-panel" aria-hidden="true">
+    <div class="details-header">
+      <div>
+        <h2 class="details-title" id="details-title">Photo details</h2>
+        <div class="details-subtitle" id="details-subtitle">Metadata and organization info</div>
+      </div>
+      <button type="button" class="details-close" onclick="closeDetailsPanel()">Close</button>
+    </div>
+    <div class="details-body">
+      <div class="details-preview">
+        <img id="details-image" alt="Photo details preview"/>
+      </div>
+
+      <section>
+        <div class="details-section-title">Photo Info</div>
+        <div class="details-grid">
+          <div class="details-item"><div class="details-label">Custom name</div><div class="details-value" id="details-custom-name">-</div></div>
+          <div class="details-item"><div class="details-label">Folder</div><div class="details-value" id="details-folder">-</div></div>
+          <div class="details-item"><div class="details-label">AI scene</div><div class="details-value" id="details-scene">-</div></div>
+          <div class="details-item"><div class="details-label">Event album</div><div class="details-value" id="details-event">-</div></div>
+          <div class="details-item"><div class="details-label">Upload date</div><div class="details-value" id="details-upload-date">-</div></div>
+          <div class="details-item"><div class="details-label">Original filename</div><div class="details-value" id="details-original-name">-</div></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="details-section-title">Quick Actions</div>
+        <div class="details-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="details-rename-btn">Rename</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="details-share-btn">Share</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="details-download-btn">Download</button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <div class="toast-container"></div>
+  <script src="../js/api.js"></script>
+  <script src="../js/gallery.js"></script>
+</body>
+</html>

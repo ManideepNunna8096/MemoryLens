@@ -1,0 +1,2472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MemoryLens Beginner Project Guide</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 20mm 16mm;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #18202a;
+      line-height: 1.45;
+      font-size: 11.2pt;
+      margin: 0;
+      background: #ffffff;
+    }
+    h1 {
+      font-size: 27pt;
+      line-height: 1.15;
+      margin: 0 0 14px;
+      color: #111827;
+      page-break-after: avoid;
+    }
+    h2 {
+      font-size: 19pt;
+      margin: 30px 0 10px;
+      padding-top: 4px;
+      color: #1d4ed8;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 14.5pt;
+      margin: 20px 0 8px;
+      color: #0f172a;
+      page-break-after: avoid;
+    }
+    h4 {
+      font-size: 12.5pt;
+      margin: 15px 0 6px;
+      color: #334155;
+      page-break-after: avoid;
+    }
+    p {
+      margin: 0 0 9px;
+    }
+    ul, ol {
+      margin: 4px 0 11px 0;
+      padding-left: 0;
+    }
+    ul {
+      list-style: none;
+    }
+    ul li::before {
+      content: "- ";
+      font-weight: 700;
+      color: #2563eb;
+    }
+    ol {
+      list-style-position: inside;
+    }
+    li {
+      margin: 3px 0;
+      page-break-inside: avoid;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9.7pt;
+      background: #eef2ff;
+      color: #1e3a8a;
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 9px 0 15px;
+      page-break-inside: avoid;
+      font-size: 10.2pt;
+    }
+    th {
+      background: #e0ecff;
+      color: #0f172a;
+      text-align: left;
+      font-weight: 700;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 7px;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+    .section-rule {
+      height: 1px;
+      background: #dbe4f0;
+      margin: 18px 0;
+      page-break-after: avoid;
+    }
+    .codebox, .diagram {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      margin: 10px 0 15px;
+      page-break-inside: avoid;
+      overflow: hidden;
+    }
+    .diagram {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+    .box-label {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #475569;
+      padding: 7px 9px 0;
+    }
+    pre {
+      margin: 0;
+      padding: 8px 9px 10px;
+      white-space: pre-wrap;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 8.8pt;
+      line-height: 1.35;
+      color: #0f172a;
+    }
+    strong {
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+<h1>MemoryLens Beginner Project Guide</h1>
+<p>This guide explains MemoryLens as if you are seeing the project for the first time. It is written for project reviews, viva, presentations, and interviews.</p>
+<p>Use it in three ways:</p>
+<ol>
+<li>Read Sections 1 to 4 to understand the project story.</li>
+<li>Read Sections 5 to 12 to understand architecture, code, database, APIs, and AI.</li>
+<li>Read Sections 13 to 16 before review for speaking points and viva answers.</li>
+</ol>
+<div class="section-rule"></div>
+<h2>1. Project In Simple Words</h2>
+<h3>What MemoryLens Does</h3>
+<p>MemoryLens is an AI-powered photo organizer.</p>
+<p>It allows a user to:</p>
+<ul>
+<li>Create an account and log in.</li>
+<li>Upload photos.</li>
+<li>Let AI classify each photo by scene, such as Beach, Office, Kitchen, Campus, or Temple.</li>
+<li>Search photos using natural language, such as &quot;beach trip&quot;, &quot;classroom&quot;, or &quot;food photos&quot;.</li>
+<li>Organize photos into event albums.</li>
+<li>Browse photos by timeline: year, month, and day.</li>
+<li>Detect exact and similar duplicate photos.</li>
+<li>Mark favorites, trash photos, restore photos, rename photos, and create custom folders.</li>
+<li>Share photos or albums through expiring share links.</li>
+<li>Export photos or albums as ZIP files.</li>
+<li>Check database, model, vector search, and backup readiness from an admin health page.</li>
+</ul>
+<p>Beginner analogy:</p>
+<p>Think of MemoryLens like Google Photos, but as your own project. A normal gallery only stores images. MemoryLens understands something about each photo, stores that understanding, and helps the user find and manage photos intelligently.</p>
+<h3>Problem It Solves</h3>
+<p>People usually have many photos on phones and laptops. After some time, it becomes hard to find a specific photo manually.</p>
+<p>Common problems are:</p>
+<ul>
+<li>Photos are not sorted.</li>
+<li>File names are not meaningful.</li>
+<li>Searching by file name does not work.</li>
+<li>Similar duplicate photos take space.</li>
+<li>Event-based albums take time to create manually.</li>
+<li>Users forget when a photo was captured.</li>
+</ul>
+<p>MemoryLens solves this by using AI and structured storage.</p>
+<p>It converts a normal photo library into a smart photo library.</p>
+<h3>Why It Is Useful</h3>
+<p>It is useful because it reduces manual work. Instead of making the user create every folder and album manually, the system automatically extracts useful information.</p>
+<p>For example:</p>
+<ul>
+<li>If a user uploads 100 mixed photos, MemoryLens can identify scenes.</li>
+<li>If the user searches &quot;airport&quot;, photos from airports can appear even if the file name is <code>IMG_001.jpg</code>.</li>
+<li>If two copies of the same photo exist, MemoryLens can detect them.</li>
+<li>If photos belong to similar life categories, MemoryLens can group them into albums.</li>
+</ul>
+<h3>Real-World Use Cases</h3>
+<ul>
+<li>A student organizes campus, lab, classroom, and event photos.</li>
+<li>A family organizes travel, food, home, and celebration photos.</li>
+<li>A photographer quickly searches through large photo collections.</li>
+<li>A college project team stores project documentation images.</li>
+<li>A user finds duplicates and cleans up storage.</li>
+<li>A reviewer sees a realistic full-stack AI application with auth, database, background processing, and search.</li>
+</ul>
+<h3>Main Features</h3>
+<table>
+<thead><tr>
+<th>Feature</th>
+<th>What It Means</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Authentication</td>
+<td>Users can register, log in, and access only their own photos.</td>
+</tr>
+<tr>
+<td>Upload</td>
+<td>Users can upload multiple images.</td>
+</tr>
+<tr>
+<td>Scene Classification</td>
+<td>AI predicts the scene of each photo.</td>
+</tr>
+<tr>
+<td>Semantic Search</td>
+<td>User searches by meaning, not only exact text.</td>
+</tr>
+<tr>
+<td>Event Albums</td>
+<td>Photos can be organized into albums.</td>
+</tr>
+<tr>
+<td>Timeline</td>
+<td>Photos are grouped by year, month, and day.</td>
+</tr>
+<tr>
+<td>Folders</td>
+<td>Users can keep AI folders or create custom folders.</td>
+</tr>
+<tr>
+<td>Duplicate Detection</td>
+<td>Exact and similar photo copies can be found.</td>
+</tr>
+<tr>
+<td>Favorites, Archive, Trash</td>
+<td>Gallery management actions.</td>
+</tr>
+<tr>
+<td>Share Links</td>
+<td>Photos and albums can be shared using expiring links.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td>Photos and albums can be downloaded as ZIP files.</td>
+</tr>
+<tr>
+<td>Admin Health</td>
+<td>Shows database, pgvector, models, and backup status.</td>
+</tr>
+<tr>
+<td>Backup</td>
+<td>Creates PostgreSQL dump and uploads archive.</td>
+</tr>
+</tbody></table>
+<h3>Complete Workflow From Start To End</h3>
+<ol>
+<li>User opens MemoryLens.</li>
+<li>User registers or logs in.</li>
+<li>Frontend stores authentication tokens.</li>
+<li>User uploads photos.</li>
+<li>Backend saves image files in <code>backend/uploads</code>.</li>
+<li>Backend creates photo records in PostgreSQL.</li>
+<li>Backend creates a background job.</li>
+<li>AI processing starts in the background.</li>
+<li>For each photo:</li>
+</ol>
+<ul>
+<li>EXIF capture time is read.</li>
+<li>CLIP image embedding is generated.</li>
+<li>ResNet Places365 scene classifier predicts scene.</li>
+<li>Duplicate signatures are computed.</li>
+<li>Photo is marked ready.</li>
+</ul>
+<ol>
+<li>Frontend polls job progress.</li>
+<li>Gallery shows processed photos.</li>
+<li>User can search, organize events, browse timeline, clean duplicates, share, export, or backup.</li>
+</ol>
+<p>Review speaking point:</p>
+<p>&quot;MemoryLens is a full-stack AI photo organizer. It combines user authentication, file upload, PostgreSQL metadata storage, pgvector-based semantic search, scene classification using Places365, CLIP embeddings, background processing, duplicate detection, event albums, timeline browsing, and sharing/export features.&quot;</p>
+<div class="section-rule"></div>
+<h2>2. Architecture Overview</h2>
+<h3>Simple Architecture Diagram</h3>
+<div class="diagram"><div class="box-label">Diagram source</div><pre>flowchart LR
+    User[&quot;User in Browser&quot;]
+    Frontend[&quot;Frontend: HTML, CSS, JavaScript&quot;]
+    APIJS[&quot;api.js: API wrapper, JWT, downloads&quot;]
+    Flask[&quot;Flask Backend&quot;]
+    Routes[&quot;Blueprint Routes&quot;]
+    Services[&quot;Service Modules&quot;]
+    DB[&quot;PostgreSQL Database&quot;]
+    Vector[&quot;pgvector Embeddings&quot;]
+    Files[&quot;backend/uploads Photo Files&quot;]
+    ML[&quot;ML Models: CLIP + ResNet Places365&quot;]
+    Jobs[&quot;BackgroundJob Table + Thread Workers&quot;]
+
+    User --&gt; Frontend
+    Frontend --&gt; APIJS
+    APIJS --&gt; Flask
+    Flask --&gt; Routes
+    Routes --&gt; Services
+    Services --&gt; DB
+    Services --&gt; Vector
+    Services --&gt; Files
+    Services --&gt; ML
+    Services --&gt; Jobs
+    Jobs --&gt; APIJS</pre></div>
+<h3>Layer-By-Layer Explanation</h3>
+<p>MemoryLens has these main layers:</p>
+<ol>
+<li>Frontend layer</li>
+<li>API communication layer</li>
+<li>Backend route layer</li>
+<li>Service/business logic layer</li>
+<li>Database layer</li>
+<li>File storage layer</li>
+<li>AI/ML layer</li>
+<li>Background job layer</li>
+<li>Admin/backup layer</li>
+</ol>
+<h3>2.1 Frontend Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>frontend/index.html</code></li>
+<li><code>frontend/pages/*.html</code></li>
+<li><code>frontend/js/*.js</code></li>
+<li><code>frontend/css/main.css</code></li>
+</ul>
+<p>This is what the user sees.</p>
+<p>It is built using plain HTML, CSS, and JavaScript. There is no React, Angular, or Vue in the current project. Each page is a normal static HTML page, and each page has its own JavaScript file.</p>
+<p>Important frontend pages:</p>
+<table>
+<thead><tr>
+<th>Page</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>index.html</code></td>
+<td>Login and register page.</td>
+</tr>
+<tr>
+<td><code>pages/upload.html</code></td>
+<td>Upload photos using drag and drop or file picker.</td>
+</tr>
+<tr>
+<td><code>pages/gallery.html</code></td>
+<td>Main photo library.</td>
+</tr>
+<tr>
+<td><code>pages/search.html</code></td>
+<td>Natural-language search.</td>
+</tr>
+<tr>
+<td><code>pages/events.html</code></td>
+<td>Event album management.</td>
+</tr>
+<tr>
+<td><code>pages/timeline.html</code></td>
+<td>Year/month/day photo browsing.</td>
+</tr>
+<tr>
+<td><code>pages/duplicates.html</code></td>
+<td>Duplicate photo cleanup.</td>
+</tr>
+<tr>
+<td><code>pages/share.html</code></td>
+<td>Public share viewer.</td>
+</tr>
+<tr>
+<td><code>pages/admin-health.html</code></td>
+<td>Health and backup dashboard.</td>
+</tr>
+</tbody></table>
+<p>Beginner analogy:</p>
+<p>The frontend is like a restaurant dining area. The user sits there, clicks buttons, chooses files, and sees results. It does not directly cook the food. It sends requests to the backend kitchen.</p>
+<h3>2.2 API Communication Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>frontend/js/api.js</code></li>
+</ul>
+<p>This file is very important. It is the common bridge between frontend pages and Flask backend.</p>
+<p>It handles:</p>
+<ul>
+<li>API base URL.</li>
+<li>Access token and refresh token storage.</li>
+<li>Adding <code>Authorization: Bearer &lt;token&gt;</code> headers.</li>
+<li>Refreshing JWT access tokens when they are expiring.</li>
+<li>Fetching JSON.</li>
+<li>Uploading files.</li>
+<li>Polling jobs.</li>
+<li>Loading protected photo images.</li>
+<li>Downloading ZIP exports.</li>
+<li>Building share viewer URLs.</li>
+</ul>
+<p>Review speaking point:</p>
+<p>&quot;The frontend does not directly repeat API logic on every page. A shared <code>api.js</code> file centralizes token handling, API calls, downloads, image loading, and job polling.&quot;</p>
+<h3>2.3 Backend Route Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>backend/routes/</code></li>
+</ul>
+<p>The backend is built with Flask. Routes are grouped using Flask Blueprints.</p>
+<p>Blueprint analogy:</p>
+<p>A blueprint is like a department in an office. Instead of putting all code in one huge file, each department handles one feature area.</p>
+<p>Blueprints in this project:</p>
+<table>
+<thead><tr>
+<th>Blueprint</th>
+<th>URL Prefix</th>
+<th>Responsibility</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>auth_bp</code></td>
+<td><code>/auth</code></td>
+<td>Register, login, refresh token.</td>
+</tr>
+<tr>
+<td><code>photo_bp</code></td>
+<td><code>/photos</code></td>
+<td>Upload, gallery, file delivery, bulk actions.</td>
+</tr>
+<tr>
+<td><code>search_bp</code></td>
+<td><code>/search</code></td>
+<td>Natural-language search.</td>
+</tr>
+<tr>
+<td><code>event_bp</code></td>
+<td><code>/events</code></td>
+<td>Event album organization and management.</td>
+</tr>
+<tr>
+<td><code>timeline_bp</code></td>
+<td><code>/timeline</code></td>
+<td>Date-based browsing.</td>
+</tr>
+<tr>
+<td><code>duplicates_bp</code></td>
+<td><code>/duplicates</code></td>
+<td>Exact and similar duplicate detection.</td>
+</tr>
+<tr>
+<td><code>folder_bp</code></td>
+<td><code>/folders</code></td>
+<td>Folder rename, merge, move, delete.</td>
+</tr>
+<tr>
+<td><code>job_bp</code></td>
+<td><code>/jobs</code></td>
+<td>Job progress polling.</td>
+</tr>
+<tr>
+<td><code>share_bp</code></td>
+<td><code>/share</code></td>
+<td>Public share links.</td>
+</tr>
+<tr>
+<td><code>admin_bp</code></td>
+<td><code>/admin</code></td>
+<td>Health check and backup.</td>
+</tr>
+</tbody></table>
+<h3>2.4 Service Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>backend/background_tasks.py</code></li>
+<li><code>backend/ml_services.py</code></li>
+<li><code>backend/vector_search.py</code></li>
+<li><code>backend/duplicate_detection.py</code></li>
+<li><code>backend/event_album_service.py</code></li>
+<li><code>backend/photo_metadata.py</code></li>
+<li><code>backend/share_utils.py</code></li>
+<li><code>backend/photo_collections.py</code></li>
+<li><code>backend/security.py</code></li>
+<li><code>backend/time_utils.py</code></li>
+</ul>
+<p>The service layer contains reusable logic.</p>
+<p>Examples:</p>
+<ul>
+<li><code>background_tasks.py</code> processes uploaded photos and organizes events.</li>
+<li><code>vector_search.py</code> performs pgvector similarity search.</li>
+<li><code>duplicate_detection.py</code> computes SHA-256 and dHash.</li>
+<li><code>photo_metadata.py</code> reads EXIF capture time.</li>
+<li><code>share_utils.py</code> creates signed share tokens and ZIP downloads.</li>
+<li><code>event_album_service.py</code> updates album metadata.</li>
+</ul>
+<p>Beginner analogy:</p>
+<p>Routes are reception counters. Service modules are the specialists behind the counter who actually do the work.</p>
+<h3>2.5 Database Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>backend/models/</code></li>
+<li><code>backend/migrations/</code></li>
+</ul>
+<p>Database:</p>
+<ul>
+<li>PostgreSQL</li>
+<li>pgvector extension for vector search</li>
+<li>SQLAlchemy ORM for Python database access</li>
+<li>Flask-Migrate/Alembic for migrations</li>
+</ul>
+<p>Tables:</p>
+<ul>
+<li><code>users</code></li>
+<li><code>photos</code></li>
+<li><code>events</code></li>
+<li><code>jobs</code></li>
+</ul>
+<h3>2.6 File Storage Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>backend/uploads</code></li>
+</ul>
+<p>The database does not store the full image bytes. It stores file names and metadata. The real image files are saved on disk.</p>
+<p>This is common because:</p>
+<ul>
+<li>Image files can be large.</li>
+<li>Databases are better for structured metadata.</li>
+<li>File systems are better for storing raw media files locally.</li>
+</ul>
+<p>Example:</p>
+<p>Database row:</p>
+<ul>
+<li><code>filename = abcd1234.jpg</code></li>
+<li><code>scene = Beach</code></li>
+<li><code>user_id = 5</code></li>
+</ul>
+<p>Actual file:</p>
+<ul>
+<li><code>backend/uploads/abcd1234.jpg</code></li>
+</ul>
+<h3>2.7 AI/ML Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>ml/scene_classifier.py</code></li>
+<li><code>ml/clip_search.py</code></li>
+<li><code>ml/event_organizer.py</code></li>
+<li><code>ml/resnet18_places365.pth.tar</code></li>
+<li><code>ml/categories_places365.txt</code></li>
+</ul>
+<p>Models:</p>
+<ul>
+<li>ResNet-18 trained for Places365 scene classification.</li>
+<li>CLIP ViT-B/32 for image and text embeddings.</li>
+</ul>
+<p>AI jobs:</p>
+<ul>
+<li>Classify scene.</li>
+<li>Generate image embeddings.</li>
+<li>Generate text embeddings during search.</li>
+<li>Support event grouping and semantic search.</li>
+</ul>
+<h3>2.8 Background Job Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>backend/background_tasks.py</code></li>
+<li><code>backend/models/job.py</code></li>
+<li><code>backend/routes/job_routes.py</code></li>
+</ul>
+<p>Long-running tasks are tracked as jobs.</p>
+<p>Why jobs are needed:</p>
+<p>AI processing can take time. If the backend tried to finish everything before replying, the browser would wait too long. Instead:</p>
+<ol>
+<li>Backend accepts upload.</li>
+<li>Backend creates a <code>BackgroundJob</code>.</li>
+<li>Backend immediately returns job ID.</li>
+<li>Worker thread processes photos.</li>
+<li>Frontend polls <code>/jobs/&lt;job_id&gt;</code>.</li>
+<li>UI updates progress.</li>
+</ol>
+<h3>2.9 Admin And Backup Layer</h3>
+<p>Location:</p>
+<ul>
+<li><code>backend/routes/admin_routes.py</code></li>
+<li><code>backend/backup_cli.py</code></li>
+<li><code>backend/scripts/backup_postgres.py</code></li>
+</ul>
+<p>The admin health page checks:</p>
+<ul>
+<li>Database connection.</li>
+<li>Number of users/photos/events/jobs.</li>
+<li>pgvector readiness.</li>
+<li>Scene classifier readiness.</li>
+<li>CLIP readiness.</li>
+<li>Event grouping assets.</li>
+<li>Backup availability.</li>
+</ul>
+<p>Backup creates:</p>
+<ul>
+<li>PostgreSQL dump.</li>
+<li>Upload files ZIP.</li>
+<li>Manifest JSON.</li>
+</ul>
+<div class="section-rule"></div>
+<h2>3. Data Flow Through The System</h2>
+<h3>Main Data Flow Diagram</h3>
+<div class="diagram"><div class="box-label">Diagram source</div><pre>sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant A as api.js
+    participant B as Flask Backend
+    participant D as PostgreSQL
+    participant S as Upload Folder
+    participant M as AI Models
+    participant J as Job Worker
+
+    U-&gt;&gt;F: Select photos and click upload
+    F-&gt;&gt;A: Photos.upload(files)
+    A-&gt;&gt;B: POST /photos/upload with JWT
+    B-&gt;&gt;S: Save image files
+    B-&gt;&gt;D: Insert Photo rows and BackgroundJob
+    B-&gt;&gt;J: Start photo processing job
+    B--&gt;&gt;A: Return job ID and queued photos
+    A-&gt;&gt;B: GET /jobs/job_id repeatedly
+    J-&gt;&gt;M: Run CLIP and scene classifier
+    J-&gt;&gt;D: Store embeddings, scene, status
+    B--&gt;&gt;A: Return job progress
+    A--&gt;&gt;F: Update progress bar and results</pre></div>
+<h3>What Happens When A User Performs An Action</h3>
+<p>Every user action follows this general lifecycle:</p>
+<ol>
+<li>User clicks something in the browser.</li>
+<li>Page JavaScript handles the click.</li>
+<li>Page script calls a function from <code>api.js</code>.</li>
+<li><code>api.js</code> adds JWT token if needed.</li>
+<li>Flask receives request.</li>
+<li>Flask route validates input and user identity.</li>
+<li>Backend reads or writes PostgreSQL.</li>
+<li>Backend may read or write image files.</li>
+<li>Backend may call AI model helpers.</li>
+<li>Backend returns JSON or a file response.</li>
+<li>Frontend updates the page.</li>
+</ol>
+<p>Beginner analogy:</p>
+<p>This is like ordering food online. You click an item, the app sends an order, the restaurant prepares it, and the app shows status until the food arrives.</p>
+<div class="section-rule"></div>
+<h2>4. Complete Project Structure</h2>
+<h3>Top-Level Files</h3>
+<table>
+<thead><tr>
+<th>File/Folder</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>.env.example</code></td>
+<td>Example environment settings.</td>
+</tr>
+<tr>
+<td><code>.gitignore</code></td>
+<td>Keeps generated files, caches, uploads, backups, and secrets out of Git.</td>
+</tr>
+<tr>
+<td><code>docker-compose.yml</code></td>
+<td>Starts PostgreSQL with pgvector.</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>Setup and API overview.</td>
+</tr>
+<tr>
+<td><code>backend/</code></td>
+<td>Flask API, models, routes, services, tests, migrations.</td>
+</tr>
+<tr>
+<td><code>frontend/</code></td>
+<td>Static HTML/CSS/JS client.</td>
+</tr>
+<tr>
+<td><code>ml/</code></td>
+<td>ML model code and assets.</td>
+</tr>
+<tr>
+<td><code>docs/</code></td>
+<td>Project reports, architecture diagrams, notes, and this guide.</td>
+</tr>
+</tbody></table>
+<h3>Backend Folder</h3>
+<table>
+<thead><tr>
+<th>File/Folder</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>backend/app.py</code></td>
+<td>Creates Flask app, registers extensions and routes.</td>
+</tr>
+<tr>
+<td><code>backend/config/settings.py</code></td>
+<td>Loads environment variables and app config.</td>
+</tr>
+<tr>
+<td><code>backend/extensions.py</code></td>
+<td>Defines JWT, limiter, and migration extensions.</td>
+</tr>
+<tr>
+<td><code>backend/models/</code></td>
+<td>SQLAlchemy database models.</td>
+</tr>
+<tr>
+<td><code>backend/routes/</code></td>
+<td>API endpoints grouped by feature.</td>
+</tr>
+<tr>
+<td><code>backend/background_tasks.py</code></td>
+<td>Background photo processing and event organization.</td>
+</tr>
+<tr>
+<td><code>backend/ml_services.py</code></td>
+<td>Lazy loading access to ML functions.</td>
+</tr>
+<tr>
+<td><code>backend/vector_search.py</code></td>
+<td>pgvector search logic.</td>
+</tr>
+<tr>
+<td><code>backend/duplicate_detection.py</code></td>
+<td>SHA-256 and dHash duplicate logic.</td>
+</tr>
+<tr>
+<td><code>backend/photo_metadata.py</code></td>
+<td>EXIF capture-time extraction.</td>
+</tr>
+<tr>
+<td><code>backend/share_utils.py</code></td>
+<td>Share tokens and ZIP export helpers.</td>
+</tr>
+<tr>
+<td><code>backend/photo_collections.py</code></td>
+<td>Active, favorites, archived, trash filters.</td>
+</tr>
+<tr>
+<td><code>backend/security.py</code></td>
+<td>Email and password validation.</td>
+</tr>
+<tr>
+<td><code>backend/error_handlers.py</code></td>
+<td>JSON error responses.</td>
+</tr>
+<tr>
+<td><code>backend/migrations/</code></td>
+<td>Database migration history.</td>
+</tr>
+<tr>
+<td><code>backend/tests/</code></td>
+<td>Automated backend tests.</td>
+</tr>
+</tbody></table>
+<h3>Frontend Folder</h3>
+<table>
+<thead><tr>
+<th>File/Folder</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>frontend/index.html</code></td>
+<td>Login/register screen.</td>
+</tr>
+<tr>
+<td><code>frontend/css/main.css</code></td>
+<td>Shared styling.</td>
+</tr>
+<tr>
+<td><code>frontend/js/api.js</code></td>
+<td>Shared API layer.</td>
+</tr>
+<tr>
+<td><code>frontend/js/auth.js</code></td>
+<td>Login/register logic.</td>
+</tr>
+<tr>
+<td><code>frontend/js/upload.js</code></td>
+<td>Upload and job polling UI.</td>
+</tr>
+<tr>
+<td><code>frontend/js/gallery.js</code></td>
+<td>Main gallery, folders, bulk actions.</td>
+</tr>
+<tr>
+<td><code>frontend/js/search.js</code></td>
+<td>Search page logic.</td>
+</tr>
+<tr>
+<td><code>frontend/js/events.js</code></td>
+<td>Event album UI logic.</td>
+</tr>
+<tr>
+<td><code>frontend/js/timeline.js</code></td>
+<td>Timeline grouping UI.</td>
+</tr>
+<tr>
+<td><code>frontend/js/duplicates.js</code></td>
+<td>Duplicate cleanup UI.</td>
+</tr>
+<tr>
+<td><code>frontend/js/share.js</code></td>
+<td>Public share viewer.</td>
+</tr>
+<tr>
+<td><code>frontend/js/admin_health.js</code></td>
+<td>Health dashboard and backup action.</td>
+</tr>
+</tbody></table>
+<h3>ML Folder</h3>
+<table>
+<thead><tr>
+<th>File</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ml/scene_classifier.py</code></td>
+<td>Loads ResNet-18 Places365 and predicts scene labels.</td>
+</tr>
+<tr>
+<td><code>ml/clip_search.py</code></td>
+<td>Loads CLIP and generates image/text embeddings.</td>
+</tr>
+<tr>
+<td><code>ml/event_organizer.py</code></td>
+<td>Maps scenes to event categories and contains clustering helpers.</td>
+</tr>
+<tr>
+<td><code>ml/categories_places365.txt</code></td>
+<td>Labels for Places365 scenes.</td>
+</tr>
+<tr>
+<td><code>ml/resnet18_places365.pth.tar</code></td>
+<td>ResNet-18 Places365 model weights.</td>
+</tr>
+</tbody></table>
+<div class="section-rule"></div>
+<h2>5. Important Backend Files And Functions</h2>
+<h3><code>backend/app.py</code></h3>
+<p>Main function:</p>
+<ul>
+<li><code>create_app(test_config=None)</code></li>
+</ul>
+<p>What it does:</p>
+<ol>
+<li>Creates Flask app.</li>
+<li>Loads <code>Config</code>.</li>
+<li>Requires PostgreSQL database URL.</li>
+<li>Creates instance and upload folders.</li>
+<li>Configures logging.</li>
+<li>Enables CORS for allowed frontend origins.</li>
+<li>Initializes JWT, rate limiter, SQLAlchemy, and migrations.</li>
+<li>Checks pgvector readiness.</li>
+<li>Registers JSON error handlers.</li>
+<li>Registers all route blueprints.</li>
+<li>Registers CLI commands for backups and vector maintenance.</li>
+</ol>
+<p>Review speaking point:</p>
+<p>&quot;The Flask app uses an app factory pattern. <code>create_app()</code> prepares configuration, extensions, logging, database access, CORS, error handling, and then registers feature-specific blueprints.&quot;</p>
+<h3><code>backend/config/settings.py</code></h3>
+<p>Purpose:</p>
+<p>Loads environment variables from <code>.env</code> files and turns them into Flask config values.</p>
+<p>Important config values:</p>
+<ul>
+<li><code>SECRET_KEY</code></li>
+<li><code>JWT_SECRET_KEY</code></li>
+<li><code>DATABASE_URL</code></li>
+<li><code>UPLOAD_FOLDER</code></li>
+<li><code>ML_FOLDER</code></li>
+<li><code>VECTOR_BACKEND</code></li>
+<li><code>CLIP_VECTOR_DIM</code></li>
+<li><code>FRONTEND_ORIGINS</code></li>
+<li><code>JWT_ACCESS_MINUTES</code></li>
+<li><code>JWT_REFRESH_DAYS</code></li>
+<li><code>AUTH_RATE_LIMIT</code></li>
+<li><code>TASKS_EAGER</code></li>
+</ul>
+<p>Beginner explanation:</p>
+<p>Configuration means settings that can change between machines, such as database URL, secret keys, and upload folder path. We keep them outside code so the same code can run in development, demo, or deployment.</p>
+<h3><code>backend/extensions.py</code></h3>
+<p>Purpose:</p>
+<p>Creates extension objects once:</p>
+<ul>
+<li><code>jwt = JWTManager()</code></li>
+<li><code>migrate = Migrate()</code></li>
+<li><code>limiter = Limiter(...)</code></li>
+</ul>
+<p>These are later initialized inside <code>create_app()</code>.</p>
+<h3><code>backend/models/user.py</code></h3>
+<p>Model:</p>
+<ul>
+<li><code>User</code></li>
+</ul>
+<p>Fields:</p>
+<ul>
+<li><code>id</code>: Unique user ID.</li>
+<li><code>name</code>: User full name.</li>
+<li><code>email</code>: Login email, unique.</li>
+<li><code>password</code>: Hashed password.</li>
+<li><code>created_at</code>: Account creation time.</li>
+</ul>
+<p>Relationship:</p>
+<ul>
+<li>One user has many photos.</li>
+<li>One user has many jobs.</li>
+</ul>
+<p>Important method:</p>
+<ul>
+<li><code>to_dict()</code> returns safe public user details without password.</li>
+</ul>
+<h3><code>backend/models/photo.py</code></h3>
+<p>Model:</p>
+<ul>
+<li><code>Photo</code></li>
+</ul>
+<p>This is the most important table in the project.</p>
+<p>Important fields:</p>
+<table>
+<thead><tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Unique photo ID.</td>
+</tr>
+<tr>
+<td><code>filename</code></td>
+<td>Stored file name in upload folder.</td>
+</tr>
+<tr>
+<td><code>original_filename</code></td>
+<td>User&#x27;s original file name.</td>
+</tr>
+<tr>
+<td><code>scene</code></td>
+<td>AI-predicted scene label.</td>
+</tr>
+<tr>
+<td><code>clip_vector_pg</code></td>
+<td>CLIP embedding stored as pgvector.</td>
+</tr>
+<tr>
+<td><code>clip_model_version</code></td>
+<td>Version/name of CLIP model used.</td>
+</tr>
+<tr>
+<td><code>scene_model_version</code></td>
+<td>Version/name of scene classifier used.</td>
+</tr>
+<tr>
+<td><code>processing_status</code></td>
+<td><code>queued</code>, <code>in_progress</code>, <code>ready</code>, or <code>failed</code>.</td>
+</tr>
+<tr>
+<td><code>processing_error</code></td>
+<td>Error text if processing failed.</td>
+</tr>
+<tr>
+<td><code>captured_at</code></td>
+<td>Photo capture time from EXIF metadata.</td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td>User custom name for photo.</td>
+</tr>
+<tr>
+<td><code>custom_folder</code></td>
+<td>User-selected folder override.</td>
+</tr>
+<tr>
+<td><code>sha256_hash</code></td>
+<td>Exact duplicate hash.</td>
+</tr>
+<tr>
+<td><code>dhash</code></td>
+<td>Similar-image perceptual hash.</td>
+</tr>
+<tr>
+<td><code>is_favorite</code></td>
+<td>Favorite flag.</td>
+</tr>
+<tr>
+<td><code>is_archived</code></td>
+<td>Archive flag.</td>
+</tr>
+<tr>
+<td><code>trashed_at</code></td>
+<td>Trash timestamp.</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>Owner user.</td>
+</tr>
+<tr>
+<td><code>event_id</code></td>
+<td>Optional album/event ID.</td>
+</tr>
+<tr>
+<td><code>uploaded_at</code></td>
+<td>Upload time.</td>
+</tr>
+</tbody></table>
+<p>Important methods:</p>
+<ul>
+<li><code>filepath(upload_root)</code>: Returns actual file path.</li>
+<li><code>set_clip_embedding(vector)</code>: Saves vector into pgvector column.</li>
+<li><code>get_clip_embedding()</code>: Reads embedding back as NumPy array.</li>
+<li><code>folder_label()</code>: Uses custom folder if present; otherwise scene label.</li>
+<li><code>to_dict()</code>: Converts photo into JSON-friendly form.</li>
+</ul>
+<p>Review speaking point:</p>
+<p>&quot;The <code>photos</code> table is the central table. It connects file storage, AI metadata, duplicate hashes, user ownership, folder state, event album membership, and search embeddings.&quot;</p>
+<h3><code>backend/models/event.py</code></h3>
+<p>Model:</p>
+<ul>
+<li><code>Event</code></li>
+</ul>
+<p>Fields:</p>
+<ul>
+<li><code>id</code></li>
+<li><code>label</code></li>
+<li><code>dominant_scene</code></li>
+<li><code>user_id</code></li>
+<li><code>created_at</code></li>
+</ul>
+<p>Relationship:</p>
+<ul>
+<li>One event has many photos.</li>
+</ul>
+<p>Important method:</p>
+<ul>
+<li><code>to_dict()</code> returns event information, photo count, and preview photos.</li>
+</ul>
+<h3><code>backend/models/job.py</code></h3>
+<p>Model:</p>
+<ul>
+<li><code>BackgroundJob</code></li>
+</ul>
+<p>Fields:</p>
+<ul>
+<li><code>id</code>: UUID job ID.</li>
+<li><code>job_type</code>: <code>photo_processing</code> or <code>event_organization</code>.</li>
+<li><code>status</code>: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>completed_with_errors</code>, or <code>failed</code>.</li>
+<li><code>user_id</code>: Owner.</li>
+<li><code>total_items</code>: Total work count.</li>
+<li><code>completed_items</code>: Completed count.</li>
+<li><code>result_payload</code>: JSON text result.</li>
+<li><code>error_message</code>: Error if failed.</li>
+<li><code>created_at</code>, <code>updated_at</code></li>
+</ul>
+<p>Important method:</p>
+<ul>
+<li><code>to_dict()</code> returns progress percentage and parsed result.</li>
+</ul>
+<p>Review speaking point:</p>
+<p>&quot;Background jobs make the UI responsive. The backend returns a job ID immediately, and the frontend polls the job endpoint to show progress.&quot;</p>
+<div class="section-rule"></div>
+<h2>6. Database Schema</h2>
+<h3>Database Diagram</h3>
+<div class="diagram"><div class="box-label">Diagram source</div><pre>erDiagram
+    USERS ||--o{ PHOTOS : owns
+    USERS ||--o{ EVENTS : owns
+    USERS ||--o{ JOBS : owns
+    EVENTS ||--o{ PHOTOS : groups
+
+    USERS {
+        int id PK
+        string name
+        string email UK
+        string password
+        datetime created_at
+    }
+
+    PHOTOS {
+        int id PK
+        string filename
+        string original_filename
+        string scene
+        vector clip_vector_pg
+        string processing_status
+        datetime captured_at
+        string custom_folder
+        string sha256_hash
+        string dhash
+        bool is_favorite
+        bool is_archived
+        datetime trashed_at
+        int user_id FK
+        int event_id FK
+        datetime uploaded_at
+    }
+
+    EVENTS {
+        int id PK
+        string label
+        string dominant_scene
+        int user_id FK
+        datetime created_at
+    }
+
+    JOBS {
+        string id PK
+        string job_type
+        string status
+        int user_id FK
+        int total_items
+        int completed_items
+        text result_payload
+        text error_message
+    }</pre></div>
+<h3>Why PostgreSQL Is Used</h3>
+<p>PostgreSQL is a powerful relational database.</p>
+<p>It is used because:</p>
+<ul>
+<li>It supports reliable structured data storage.</li>
+<li>It supports relationships using foreign keys.</li>
+<li>It works well with SQLAlchemy and migrations.</li>
+<li>It supports pgvector for vector similarity search.</li>
+<li>It is more production-ready than SQLite for this project.</li>
+</ul>
+<p>Why not SQLite:</p>
+<ul>
+<li>SQLite is simple, but it is not ideal for pgvector search.</li>
+<li>PostgreSQL handles multi-user and larger applications better.</li>
+<li>README and app startup now require PostgreSQL only.</li>
+</ul>
+<h3>What pgvector Does</h3>
+<p>pgvector is a PostgreSQL extension that stores vectors and searches by similarity.</p>
+<p>Beginner analogy:</p>
+<p>A vector is like a numerical fingerprint of meaning. For a photo, CLIP creates a list of 512 numbers. Similar images or matching text queries have vectors that point in similar directions.</p>
+<p>MemoryLens stores each photo&#x27;s CLIP vector in:</p>
+<ul>
+<li><code>photos.clip_vector_pg</code></li>
+</ul>
+<p>Search uses:</p>
+<ul>
+<li>PostgreSQL vector distance operator <code>&lt;=&gt;</code></li>
+</ul>
+<p>In <code>vector_search.py</code>, search calculates:</p>
+<div class="codebox"><div class="box-label">Code</div><pre>1 - (clip_vector_pg &lt;=&gt; query_vector)</pre></div>
+<p>This produces a similarity score.</p>
+<div class="section-rule"></div>
+<h2>7. API Routes Explained</h2>
+<h3>Auth Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/auth_routes.py</code></li>
+</ul>
+<p>Routes:</p>
+<table>
+<thead><tr>
+<th>Route</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>/auth/register</code></td>
+<td>POST</td>
+<td>Create account and return JWTs.</td>
+</tr>
+<tr>
+<td><code>/auth/login</code></td>
+<td>POST</td>
+<td>Verify password and return JWTs.</td>
+</tr>
+<tr>
+<td><code>/auth/refresh</code></td>
+<td>POST</td>
+<td>Use refresh token to create fresh access token.</td>
+</tr>
+</tbody></table>
+<p>Internal logic:</p>
+<ol>
+<li>Read JSON request body.</li>
+<li>Validate required fields.</li>
+<li>Validate email format.</li>
+<li>Validate password strength during registration.</li>
+<li>Check duplicate email.</li>
+<li>Hash password using Werkzeug.</li>
+<li>Store user in database.</li>
+<li>Return access token, refresh token, and user details.</li>
+</ol>
+<h3>Photo Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/photo_routes.py</code></li>
+</ul>
+<p>Important routes:</p>
+<table>
+<thead><tr>
+<th>Route</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>/photos/upload</code></td>
+<td>POST</td>
+<td>Upload images and create processing job.</td>
+</tr>
+<tr>
+<td><code>/photos/all</code></td>
+<td>GET</td>
+<td>List user&#x27;s photos with filters.</td>
+</tr>
+<tr>
+<td><code>/photos/scenes</code></td>
+<td>GET</td>
+<td>Return scene/folder counts.</td>
+</tr>
+<tr>
+<td><code>/photos/bulk</code></td>
+<td>POST</td>
+<td>Favorite, trash, restore, delete, move, folder assignment.</td>
+</tr>
+<tr>
+<td><code>/photos/retry</code></td>
+<td>POST</td>
+<td>Retry failed photo processing.</td>
+</tr>
+<tr>
+<td><code>/photos/export</code></td>
+<td>POST</td>
+<td>Export selected photos as ZIP.</td>
+</tr>
+<tr>
+<td><code>/photos/share</code></td>
+<td>POST</td>
+<td>Create expiring share link.</td>
+</tr>
+<tr>
+<td><code>/photos/&lt;id&gt;/rename</code></td>
+<td>POST</td>
+<td>Rename photo display name.</td>
+</tr>
+<tr>
+<td><code>/photos/&lt;id&gt;/file</code></td>
+<td>GET</td>
+<td>Serve protected photo file.</td>
+</tr>
+<tr>
+<td><code>/photos/&lt;id&gt;</code></td>
+<td>DELETE</td>
+<td>Permanently delete photo.</td>
+</tr>
+</tbody></table>
+<h3>Search Route</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/search_routes.py</code></li>
+</ul>
+<p>Route:</p>
+<ul>
+<li><code>GET /search?q=...</code></li>
+</ul>
+<p>Internal logic:</p>
+<ol>
+<li>Check that query is not empty.</li>
+<li>Convert text query into CLIP text embedding.</li>
+<li>Use pgvector to compare query embedding with photo embeddings.</li>
+<li>Add a small scene-name boost if query matches photo scene.</li>
+<li>Sort by final score.</li>
+<li>Return top relevant photos.</li>
+</ol>
+<h3>Event Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/event_routes.py</code></li>
+</ul>
+<p>Routes:</p>
+<table>
+<thead><tr>
+<th>Route</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>/events/organize</code></td>
+<td>POST</td>
+<td>Start event organization background job.</td>
+</tr>
+<tr>
+<td><code>/events/all</code></td>
+<td>GET</td>
+<td>List event albums.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;/photos</code></td>
+<td>GET</td>
+<td>Get photos inside one event.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;</code></td>
+<td>PATCH</td>
+<td>Rename event.</td>
+</tr>
+<tr>
+<td><code>/events/merge</code></td>
+<td>POST</td>
+<td>Merge multiple event albums.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;/split</code></td>
+<td>POST</td>
+<td>Split selected photos into new event.</td>
+</tr>
+<tr>
+<td><code>/events/move-photos</code></td>
+<td>POST</td>
+<td>Move photos to another event.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;/remove-photos</code></td>
+<td>POST</td>
+<td>Remove photos from an event.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;/export</code></td>
+<td>GET</td>
+<td>Export event as ZIP.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;/share</code></td>
+<td>POST</td>
+<td>Create event share link.</td>
+</tr>
+<tr>
+<td><code>/events/&lt;id&gt;</code></td>
+<td>DELETE</td>
+<td>Delete event album.</td>
+</tr>
+</tbody></table>
+<h3>Timeline Route</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/timeline_routes.py</code></li>
+</ul>
+<p>Route:</p>
+<ul>
+<li><code>GET /timeline?group=year|month|day</code></li>
+</ul>
+<p>Internal logic:</p>
+<ol>
+<li>Get user photos.</li>
+<li>Choose timestamp: <code>captured_at</code> if available, otherwise <code>uploaded_at</code>.</li>
+<li>Group photos into year, month, or day buckets.</li>
+<li>Return periods with labels, start/end dates, count, and photos.</li>
+</ol>
+<h3>Duplicate Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/duplicates_routes.py</code></li>
+</ul>
+<p>Routes:</p>
+<table>
+<thead><tr>
+<th>Route</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>/duplicates</code></td>
+<td>GET</td>
+<td>Return duplicate groups.</td>
+</tr>
+<tr>
+<td><code>/duplicates/scan</code></td>
+<td>POST</td>
+<td>Recalculate hashes.</td>
+</tr>
+<tr>
+<td><code>/duplicates/trash</code></td>
+<td>POST</td>
+<td>Move selected duplicates to trash.</td>
+</tr>
+<tr>
+<td><code>/duplicates/keep</code></td>
+<td>POST</td>
+<td>Keep one copy and trash others.</td>
+</tr>
+</tbody></table>
+<h3>Folder Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/folder_routes.py</code></li>
+</ul>
+<p>Routes:</p>
+<table>
+<thead><tr>
+<th>Route</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>/folders/all</code></td>
+<td>GET</td>
+<td>List folders and counts.</td>
+</tr>
+<tr>
+<td><code>/folders/move-photos</code></td>
+<td>POST</td>
+<td>Move photos to custom folder or AI folder.</td>
+</tr>
+<tr>
+<td><code>/folders/rename</code></td>
+<td>POST</td>
+<td>Rename folder.</td>
+</tr>
+<tr>
+<td><code>/folders/merge</code></td>
+<td>POST</td>
+<td>Merge folders.</td>
+</tr>
+<tr>
+<td><code>/folders/delete</code></td>
+<td>POST</td>
+<td>Delete custom folder.</td>
+</tr>
+</tbody></table>
+<h3>Job Route</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/job_routes.py</code></li>
+</ul>
+<p>Route:</p>
+<ul>
+<li><code>GET /jobs/&lt;job_id&gt;</code></li>
+</ul>
+<p>Purpose:</p>
+<p>Returns job progress for the authenticated user.</p>
+<h3>Share Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/share_routes.py</code></li>
+</ul>
+<p>Routes:</p>
+<ul>
+<li><code>/share/photos/&lt;token&gt;</code></li>
+<li><code>/share/photos/&lt;token&gt;/file/&lt;photo_id&gt;</code></li>
+<li><code>/share/photos/&lt;token&gt;/download</code></li>
+<li><code>/share/events/&lt;token&gt;</code></li>
+<li><code>/share/events/&lt;token&gt;/file/&lt;photo_id&gt;</code></li>
+<li><code>/share/events/&lt;token&gt;/download</code></li>
+</ul>
+<p>Purpose:</p>
+<p>Allows public access to selected photos or albums using a signed expiring token.</p>
+<h3>Admin Routes</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/routes/admin_routes.py</code></li>
+</ul>
+<p>Routes:</p>
+<ul>
+<li><code>GET /admin/health</code></li>
+<li><code>POST /admin/backup</code></li>
+</ul>
+<p>Purpose:</p>
+<p>Health checks and backup creation.</p>
+<p>Review note:</p>
+<p>Before public deployment, admin backup/health routes should be protected with admin authentication. In the current academic/demo project, they are available as operational checks.</p>
+<div class="section-rule"></div>
+<h2>8. AI And ML Pipeline</h2>
+<h3>AI Pipeline During Upload</h3>
+<p>When a photo is uploaded, the active processing flow is in:</p>
+<ul>
+<li><code>backend/background_tasks.py</code></li>
+</ul>
+<p>Function:</p>
+<ul>
+<li><code>_process_photo_job(app, job_id, photo_ids)</code></li>
+</ul>
+<p>For each photo:</p>
+<ol>
+<li>Read the photo from upload folder.</li>
+<li>Extract EXIF capture time.</li>
+<li>Generate CLIP image embedding.</li>
+<li>Store embedding in PostgreSQL pgvector column.</li>
+<li>Run scene classifier.</li>
+<li>Store scene label.</li>
+<li>Compute SHA-256 and dHash duplicate signatures.</li>
+<li>Mark photo <code>ready</code>.</li>
+<li>Update job progress.</li>
+</ol>
+<h3>Scene Classification</h3>
+<p>File:</p>
+<ul>
+<li><code>ml/scene_classifier.py</code></li>
+</ul>
+<p>Model:</p>
+<ul>
+<li>ResNet-18 Places365</li>
+</ul>
+<p>What it does:</p>
+<p>It looks at an image and predicts the scene category. Scene means the type of place or environment shown in the image.</p>
+<p>Examples:</p>
+<ul>
+<li>Beach</li>
+<li>Office</li>
+<li>Kitchen</li>
+<li>Classroom</li>
+<li>Airport Terminal</li>
+<li>Park</li>
+</ul>
+<p>How it works internally:</p>
+<ol>
+<li>Load image using Pillow.</li>
+<li>Convert image to RGB.</li>
+<li>Resize image to 256 x 256.</li>
+<li>Center crop to 224 x 224.</li>
+<li>Convert image to tensor.</li>
+<li>Normalize pixel values.</li>
+<li>Pass tensor through ResNet-18.</li>
+<li>Get output scores for 365 scene categories.</li>
+<li>Apply softmax to convert scores into probabilities.</li>
+<li>Choose highest probability label.</li>
+<li>Clean label formatting and return title case.</li>
+</ol>
+<p>Beginner analogy:</p>
+<p>Scene classification is like showing a photo to a person and asking, &quot;What kind of place is this?&quot;</p>
+<h3>CLIP Embeddings</h3>
+<p>File:</p>
+<ul>
+<li><code>ml/clip_search.py</code></li>
+</ul>
+<p>Model:</p>
+<ul>
+<li>CLIP ViT-B/32</li>
+</ul>
+<p>What CLIP does:</p>
+<p>CLIP understands both images and text in the same vector space.</p>
+<p>Vector space analogy:</p>
+<p>Imagine a map of meaning. Photos and text are placed on the same map. A beach photo and the text &quot;beach trip&quot; will be close to each other on that map.</p>
+<p>Image embedding:</p>
+<ul>
+<li><code>get_clip_embedding(image_path)</code></li>
+<li>Converts image into a 512-dimensional vector.</li>
+</ul>
+<p>Text embedding:</p>
+<ul>
+<li><code>get_text_embedding(text)</code></li>
+<li>Converts user query into a 512-dimensional vector.</li>
+</ul>
+<p>Why normalized vectors are used:</p>
+<p>The code divides features by their length. This makes comparison more about direction/meaning than raw magnitude.</p>
+<h3>Search With CLIP And pgvector</h3>
+<p>Search path:</p>
+<ol>
+<li>User types query in search page.</li>
+<li><code>frontend/js/search.js</code> calls <code>Search.query(query)</code>.</li>
+<li><code>api.js</code> sends <code>GET /search?q=query</code>.</li>
+<li>Backend creates text embedding using CLIP.</li>
+<li><code>vector_search.py</code> compares query vector to stored photo vectors.</li>
+<li>PostgreSQL pgvector returns closest photos.</li>
+<li><code>search_routes.py</code> adds scene boost.</li>
+<li>Frontend shows ranked results with relevance percentage.</li>
+</ol>
+<p>Search flow diagram:</p>
+<div class="diagram"><div class="box-label">Diagram source</div><pre>flowchart TD
+    Q[&quot;User query: beach trip&quot;]
+    T[&quot;CLIP text embedding&quot;]
+    V[&quot;512-number query vector&quot;]
+    P[&quot;pgvector compares with photo vectors&quot;]
+    R[&quot;Ranked photo results&quot;]
+    UI[&quot;Search page displays results&quot;]
+
+    Q --&gt; T --&gt; V --&gt; P --&gt; R --&gt; UI</pre></div>
+<h3>Duplicate Detection</h3>
+<p>File:</p>
+<ul>
+<li><code>backend/duplicate_detection.py</code></li>
+</ul>
+<p>Two techniques are used:</p>
+<ol>
+<li>SHA-256</li>
+<li>dHash</li>
+</ol>
+<h4>SHA-256</h4>
+<p>SHA-256 is a cryptographic hash.</p>
+<p>It checks exact duplicates.</p>
+<p>If two files have the exact same bytes, their SHA-256 hash will be the same.</p>
+<p>Analogy:</p>
+<p>SHA-256 is like a perfect fingerprint of the file. If even one byte changes, the fingerprint changes.</p>
+<h4>dHash</h4>
+<p>dHash means difference hash.</p>
+<p>It detects visually similar images.</p>
+<p>How dHash works in simple words:</p>
+<ol>
+<li>Convert image to grayscale.</li>
+<li>Resize it to a small size.</li>
+<li>Compare neighboring pixels.</li>
+<li>Store whether left pixel is brighter than right pixel.</li>
+<li>Convert comparisons into a compact hash.</li>
+</ol>
+<p>Two images can have slightly different files but similar dHash values.</p>
+<p>Analogy:</p>
+<p>dHash is like a rough sketch of the image. It does not capture everything, but it can tell if two images look almost the same.</p>
+<h3>Event Organization</h3>
+<p>Files:</p>
+<ul>
+<li><code>backend/background_tasks.py</code></li>
+<li><code>ml/event_organizer.py</code></li>
+<li><code>backend/event_album_service.py</code></li>
+</ul>
+<p>Important clarification:</p>
+<p>The project has an advanced <code>ml/event_organizer.py</code> module with category mapping, PCA, KMeans, time-gap logic, and CLIP subclustering helpers. In the current active backend flow, <code>/events/organize</code> uses scene category mapping from <code>event_organizer.py</code> through <code>_categorize_scene()</code> and assigns ready, unorganized photos to category albums.</p>
+<p>Active event organization flow:</p>
+<ol>
+<li>User clicks &quot;Organize New Photos&quot;.</li>
+<li>Frontend calls <code>POST /events/organize</code>.</li>
+<li>Backend creates <code>BackgroundJob</code>.</li>
+<li>Worker selects ready photos without an event.</li>
+<li>For each photo, scene is mapped to a broader category.</li>
+<li>Example: Beach -&gt; Vacation &amp; Outdoors.</li>
+<li>Backend creates or reuses matching event album.</li>
+<li>Photo gets assigned to event.</li>
+<li>Event metadata is recomputed.</li>
+<li>Job result returns created/matched album counts.</li>
+</ol>
+<p>Event category examples:</p>
+<ul>
+<li>Home -&gt; Home Moments</li>
+<li>Beach, mountain, park -&gt; Vacation &amp; Outdoors</li>
+<li>Classroom, library -&gt; Campus &amp; Learning</li>
+<li>Restaurant, coffee shop -&gt; Food &amp; Dining</li>
+<li>Office, conference room -&gt; Work &amp; Public Life</li>
+<li>Airport, highway, train station -&gt; Travel &amp; Transit</li>
+</ul>
+<p>Review speaking point:</p>
+<p>&quot;The event module maps detailed scene labels into broader human-friendly album categories. This makes albums more useful than raw scene labels.&quot;</p>
+<div class="section-rule"></div>
+<h2>9. Authentication Flow</h2>
+<h3>What Authentication Means</h3>
+<p>Authentication means proving who the user is.</p>
+<p>In MemoryLens:</p>
+<ul>
+<li>Register creates an account.</li>
+<li>Login verifies email and password.</li>
+<li>JWT tokens prove identity for future requests.</li>
+</ul>
+<h3>Register Flow</h3>
+<p>Route:</p>
+<ul>
+<li><code>POST /auth/register</code></li>
+</ul>
+<p>Steps:</p>
+<ol>
+<li>User enters name, email, password.</li>
+<li>Frontend sends JSON to backend.</li>
+<li>Backend checks all fields exist.</li>
+<li>Backend validates email.</li>
+<li>Backend checks password strength:</li>
+</ol>
+<ul>
+<li>Minimum 8 characters.</li>
+<li>At least one uppercase letter.</li>
+<li>At least one lowercase letter.</li>
+<li>At least one number.</li>
+</ul>
+<ol>
+<li>Backend checks whether email already exists.</li>
+<li>Backend hashes password.</li>
+<li>Backend stores user.</li>
+<li>Backend returns access token and refresh token.</li>
+<li>Frontend stores tokens in <code>localStorage</code>.</li>
+<li>User goes to gallery.</li>
+</ol>
+<h3>Login Flow</h3>
+<p>Route:</p>
+<ul>
+<li><code>POST /auth/login</code></li>
+</ul>
+<p>Steps:</p>
+<ol>
+<li>User enters email and password.</li>
+<li>Backend finds user by email.</li>
+<li>Backend compares password with stored hash.</li>
+<li>If valid, backend returns JWT access and refresh tokens.</li>
+<li>Frontend stores tokens and user details.</li>
+<li>User enters authenticated pages.</li>
+</ol>
+<h3>JWT Explained</h3>
+<p>JWT means JSON Web Token.</p>
+<p>It is a signed token that contains information such as user ID and expiration time.</p>
+<p>Beginner analogy:</p>
+<p>A JWT is like an entry pass. After login, the user receives a pass. For every protected request, the user shows the pass to the backend.</p>
+<h3>Access Token And Refresh Token</h3>
+<p>Access token:</p>
+<ul>
+<li>Short-lived.</li>
+<li>Used for normal API requests.</li>
+</ul>
+<p>Refresh token:</p>
+<ul>
+<li>Longer-lived.</li>
+<li>Used to get a new access token when the old one is expiring.</li>
+</ul>
+<p>In <code>frontend/js/api.js</code>:</p>
+<ul>
+<li><code>ensureAccessToken()</code> checks whether access token is expiring.</li>
+<li><code>refreshAccessToken()</code> calls <code>/auth/refresh</code>.</li>
+<li><code>apiFetch()</code> retries request after refreshing token if needed.</li>
+</ul>
+<h3>Protected Photo Delivery</h3>
+<p>Photos are not served directly as public static files.</p>
+<p>The frontend loads photos through:</p>
+<ul>
+<li><code>GET /photos/&lt;id&gt;/file</code></li>
+</ul>
+<p>This route requires JWT and checks:</p>
+<ol>
+<li>Photo belongs to current user.</li>
+<li>File exists.</li>
+<li>Send file response.</li>
+</ol>
+<p>Why this matters:</p>
+<p>It prevents one user from directly opening another user&#x27;s photo if they guess a filename.</p>
+<div class="section-rule"></div>
+<h2>10. Frontend Working In Detail</h2>
+<h3><code>frontend/js/api.js</code></h3>
+<p>This is the most important frontend JavaScript file.</p>
+<p>Major responsibilities:</p>
+<ul>
+<li><code>API_BASE</code>: Chooses backend URL.</li>
+<li><code>getToken()</code>: Reads access token.</li>
+<li><code>setAuthTokens()</code>: Saves access and refresh tokens.</li>
+<li><code>clearToken()</code>: Logs user out and redirects.</li>
+<li><code>requireAuth()</code>: Protects pages.</li>
+<li><code>apiFetch()</code>: Sends authenticated API requests.</li>
+<li><code>getJsonOrThrow()</code>: Parses JSON and throws error on failed response.</li>
+<li><code>Photos.upload()</code>: Uploads image files using XMLHttpRequest.</li>
+<li><code>Jobs.waitForCompletion()</code>: Polls job status.</li>
+<li><code>getProtectedPhotoUrl()</code>: Fetches protected image blob and creates object URL.</li>
+<li><code>hydrateProtectedImages()</code>: Loads images into <code>&lt;img data-photo-id&gt;</code>.</li>
+<li>API objects: <code>Auth</code>, <code>Photos</code>, <code>Folders</code>, <code>Jobs</code>, <code>Search</code>, <code>Timeline</code>, <code>Duplicates</code>, <code>Events</code>, <code>Shared</code>.</li>
+</ul>
+<h3>Login Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/index.html</code></li>
+<li><code>frontend/js/auth.js</code></li>
+</ul>
+<p>Flow:</p>
+<ol>
+<li>If session exists, redirect to gallery.</li>
+<li>User switches between login and register tabs.</li>
+<li>Login calls <code>Auth.login()</code>.</li>
+<li>Register calls <code>Auth.register()</code>.</li>
+<li>On success, tokens and user are stored.</li>
+<li>Browser moves to <code>pages/gallery.html</code>.</li>
+</ol>
+<h3>Upload Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/upload.html</code></li>
+<li><code>frontend/js/upload.js</code></li>
+</ul>
+<p>Flow:</p>
+<ol>
+<li>Page calls <code>requireAuth()</code>.</li>
+<li>User drags or selects image files.</li>
+<li>JavaScript shows preview cards.</li>
+<li>User clicks classify/upload.</li>
+<li><code>Photos.upload()</code> sends <code>multipart/form-data</code>.</li>
+<li>Upload progress bar updates using XHR progress events.</li>
+<li>Backend returns job ID.</li>
+<li><code>Jobs.waitForCompletion()</code> polls backend.</li>
+<li>Results show scene labels or errors.</li>
+</ol>
+<h3>Gallery Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/gallery.html</code></li>
+<li><code>frontend/js/gallery.js</code></li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Displays photo grid.</li>
+<li>Loads active/favorites/trash collections.</li>
+<li>Shows folder filters.</li>
+<li>Shows stats.</li>
+<li>Supports infinite scrolling using <code>IntersectionObserver</code>.</li>
+<li>Supports bulk actions.</li>
+<li>Supports rename, favorite, trash, restore, delete, share, download.</li>
+<li>Shows lightbox and details panel.</li>
+<li>Auto-refreshes while photos are processing.</li>
+</ul>
+<h3>Search Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/search.html</code></li>
+<li><code>frontend/js/search.js</code></li>
+</ul>
+<p>Flow:</p>
+<ol>
+<li>User enters search text.</li>
+<li>JS calls <code>Search.query(text)</code>.</li>
+<li>Backend returns ranked photos.</li>
+<li>UI displays result grid with relevance score.</li>
+</ol>
+<h3>Events Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/events.html</code></li>
+<li><code>frontend/js/events.js</code></li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Organize new photos into event albums.</li>
+<li>Display event cards with preview images.</li>
+<li>Rename, share, export, delete albums.</li>
+<li>Merge selected albums.</li>
+<li>Open album modal.</li>
+<li>Split selected photos into new album.</li>
+<li>Move photos between albums with selection or drag/drop.</li>
+</ul>
+<h3>Timeline Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/timeline.html</code></li>
+<li><code>frontend/js/timeline.js</code></li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Browse photos by year, month, or day.</li>
+<li>Drill down from year -&gt; month -&gt; day.</li>
+<li>Uses <code>captured_at</code> if available.</li>
+<li>Falls back to <code>uploaded_at</code>.</li>
+<li>Opens photo lightbox.</li>
+</ul>
+<h3>Duplicates Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/duplicates.html</code></li>
+<li><code>frontend/js/duplicates.js</code></li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Shows exact and similar duplicate groups.</li>
+<li>Shows confidence score.</li>
+<li>Allows user to keep one photo.</li>
+<li>Allows user to trash selected duplicates.</li>
+<li>Supports duplicate scan.</li>
+</ul>
+<h3>Share Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/share.html</code></li>
+<li><code>frontend/js/share.js</code></li>
+</ul>
+<p>Flow:</p>
+<ol>
+<li>Share URL contains <code>kind</code> and <code>token</code>.</li>
+<li>Page calls public share API.</li>
+<li>Backend verifies signed token and expiry.</li>
+<li>Page displays shared photos.</li>
+<li>User can download shared ZIP.</li>
+</ol>
+<h3>Admin Health Page</h3>
+<p>Files:</p>
+<ul>
+<li><code>frontend/pages/admin-health.html</code></li>
+<li><code>frontend/js/admin_health.js</code></li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Displays backend health status.</li>
+<li>Shows database counts.</li>
+<li>Shows pgvector status.</li>
+<li>Shows model readiness.</li>
+<li>Shows backup readiness.</li>
+<li>Can trigger backup.</li>
+<li>Refreshes periodically.</li>
+</ul>
+<div class="section-rule"></div>
+<h2>11. Request-Response Lifecycle Examples</h2>
+<h3>A. User Opens The App</h3>
+<ol>
+<li>Browser loads <code>frontend/index.html</code>.</li>
+<li>HTML loads CSS and JavaScript.</li>
+<li><code>auth.js</code> checks <code>hasSession()</code>.</li>
+<li>If tokens exist, redirect to gallery.</li>
+<li>Otherwise show sign in/register form.</li>
+</ol>
+<p>Speaking point:</p>
+<p>&quot;The app starts at the login page. If a session exists in localStorage, the user is taken to the gallery. Otherwise, the user must authenticate.&quot;</p>
+<h3>B. User Logs In</h3>
+<ol>
+<li>User enters email and password.</li>
+<li><code>handleLogin()</code> runs in <code>auth.js</code>.</li>
+<li>It calls <code>Auth.login(email, password)</code>.</li>
+<li><code>api.js</code> sends <code>POST /auth/login</code>.</li>
+<li>Flask route reads JSON.</li>
+<li>Backend finds user by email.</li>
+<li>Backend checks password hash.</li>
+<li>Backend creates JWT access and refresh tokens.</li>
+<li>Backend returns JSON with tokens and user.</li>
+<li>Frontend stores tokens in <code>localStorage</code>.</li>
+<li>Frontend redirects to gallery.</li>
+</ol>
+<h3>C. User Uploads Photos</h3>
+<ol>
+<li>User opens upload page.</li>
+<li><code>requireAuth()</code> checks session.</li>
+<li>User selects files.</li>
+<li>Frontend filters image files.</li>
+<li>Frontend shows previews using <code>FileReader</code>.</li>
+<li>User clicks upload.</li>
+<li><code>Photos.upload()</code> builds <code>FormData</code>.</li>
+<li>It sends <code>POST /photos/upload</code> with JWT.</li>
+<li>Backend checks JWT.</li>
+<li>Backend validates file extensions.</li>
+<li>Backend saves files to upload folder with UUID names.</li>
+<li>Backend computes duplicate signatures.</li>
+<li>Backend creates <code>Photo</code> rows with status <code>queued</code>.</li>
+<li>Backend creates a <code>BackgroundJob</code> row.</li>
+<li>Backend commits database changes.</li>
+<li>Backend submits worker thread.</li>
+<li>Backend returns HTTP 202 with job ID.</li>
+<li>Frontend polls <code>/jobs/&lt;job_id&gt;</code>.</li>
+<li>Worker processes AI tasks.</li>
+<li>Frontend displays results.</li>
+</ol>
+<h3>D. Backend Receives Upload Request</h3>
+<p>Route:</p>
+<ul>
+<li><code>upload_photos()</code> in <code>photo_routes.py</code></li>
+</ul>
+<p>Internal steps:</p>
+<ol>
+<li><code>get_jwt_identity()</code> gets current user ID.</li>
+<li><code>request.files.getlist(&#x27;files&#x27;)</code> reads files.</li>
+<li><code>allowed_file()</code> checks extension.</li>
+<li><code>secure_filename()</code> sanitizes original name.</li>
+<li>UUID file name is created.</li>
+<li><code>file.save(filepath)</code> stores file.</li>
+<li><code>compute_duplicate_signatures(filepath)</code> creates hashes.</li>
+<li><code>Photo(...)</code> row is created.</li>
+<li><code>BackgroundJob(...)</code> row is created.</li>
+<li><code>db.session.commit()</code> saves database records.</li>
+<li><code>submit_photo_processing_job(...)</code> starts background work.</li>
+</ol>
+<h3>E. AI Model Processes Data</h3>
+<p>Function:</p>
+<ul>
+<li><code>_process_photo_job()</code></li>
+</ul>
+<p>For each photo:</p>
+<ol>
+<li>Load photo record.</li>
+<li>Extract EXIF date using <code>extract_photo_metadata()</code>.</li>
+<li>Generate CLIP embedding using <code>get_clip_embedding()</code>.</li>
+<li>Store vector using <code>photo.set_clip_embedding()</code>.</li>
+<li>Classify scene using <code>classify_scene()</code>.</li>
+<li>Compute missing duplicate hashes.</li>
+<li>Save model versions.</li>
+<li>Set <code>processing_status = ready</code>.</li>
+<li>Update job progress.</li>
+<li>Commit after each photo.</li>
+</ol>
+<h3>F. Search Happens</h3>
+<ol>
+<li>User enters query like &quot;beach sunset&quot;.</li>
+<li>Frontend calls <code>GET /search?q=beach%20sunset</code>.</li>
+<li>Backend converts query into CLIP text embedding.</li>
+<li>pgvector compares text vector with stored image vectors.</li>
+<li>Backend gets most similar ready photos.</li>
+<li>Backend adds scene boost if query overlaps scene label.</li>
+<li>Backend returns top 20 results.</li>
+<li>Frontend displays photo cards and relevance bars.</li>
+</ol>
+<h3>G. Results Are Displayed</h3>
+<ol>
+<li>Frontend receives JSON array of photo metadata.</li>
+<li>It creates DOM cards.</li>
+<li>Images are not loaded by normal file path.</li>
+<li>Each image has <code>data-photo-id</code>.</li>
+<li><code>hydrateProtectedImages()</code> fetches protected image blobs.</li>
+<li>Browser displays object URLs.</li>
+</ol>
+<div class="section-rule"></div>
+<h2>12. Technologies Used</h2>
+<h3>HTML</h3>
+<p>What it is:</p>
+<p>HTML defines the structure of web pages.</p>
+<p>Why used:</p>
+<p>The frontend is a static app made of pages, forms, buttons, grids, modals, and navigation.</p>
+<p>Where used:</p>
+<ul>
+<li><code>frontend/index.html</code></li>
+<li><code>frontend/pages/*.html</code></li>
+</ul>
+<p>Alternative:</p>
+<ul>
+<li>React JSX, Vue templates, Angular templates.</li>
+</ul>
+<p>Why this project uses plain HTML:</p>
+<p>It keeps the frontend simple, easy to host, and easy to explain in academic review.</p>
+<h3>CSS</h3>
+<p>What it is:</p>
+<p>CSS styles HTML.</p>
+<p>Why used:</p>
+<p>To create the dark UI theme, cards, buttons, grids, badges, toasts, and responsive layout.</p>
+<p>Where used:</p>
+<ul>
+<li><code>frontend/css/main.css</code></li>
+<li>small inline styles in some HTML files.</li>
+</ul>
+<h3>JavaScript</h3>
+<p>What it is:</p>
+<p>JavaScript makes web pages interactive.</p>
+<p>Why used:</p>
+<p>It handles login, upload, API requests, gallery rendering, search, timeline, duplicate actions, events, sharing, and health checks.</p>
+<p>Where used:</p>
+<ul>
+<li><code>frontend/js/*.js</code></li>
+</ul>
+<p>Why plain JavaScript instead of React:</p>
+<p>For this project, plain JavaScript is enough and avoids framework complexity. It also makes the request-response flow clearer.</p>
+<h3>Fetch API</h3>
+<p>What it is:</p>
+<p>Browser API for HTTP requests.</p>
+<p>Where used:</p>
+<ul>
+<li><code>apiFetch()</code></li>
+<li><code>getJsonOrThrow()</code></li>
+<li>share and health calls.</li>
+</ul>
+<p>Why used:</p>
+<p>To call Flask endpoints from the browser.</p>
+<h3>XMLHttpRequest</h3>
+<p>What it is:</p>
+<p>Older browser API for HTTP requests.</p>
+<p>Where used:</p>
+<ul>
+<li><code>Photos.upload()</code> in <code>api.js</code></li>
+</ul>
+<p>Why used:</p>
+<p>It provides upload progress events, which are useful for the upload progress bar.</p>
+<h3>localStorage</h3>
+<p>What it is:</p>
+<p>Browser storage that persists key-value pairs.</p>
+<p>Where used:</p>
+<ul>
+<li>Stores <code>ml_token</code></li>
+<li>Stores <code>ml_refresh_token</code></li>
+<li>Stores <code>ml_user</code></li>
+</ul>
+<p>Why used:</p>
+<p>To keep the user logged in after page reloads.</p>
+<p>Security note:</p>
+<p>For production, secure HTTP-only cookies can be safer against XSS. For this academic static frontend, localStorage is simple and easy to demonstrate.</p>
+<h3>Flask</h3>
+<p>What it is:</p>
+<p>Python web framework.</p>
+<p>Where used:</p>
+<ul>
+<li><code>backend/app.py</code></li>
+<li><code>backend/routes/*.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>It is lightweight and easy to structure with routes and blueprints.</p>
+<p>Why selected instead of Django:</p>
+<p>Flask gives more control and less built-in complexity. Django is powerful but heavier and includes more default systems than this project needs.</p>
+<h3>Flask Blueprints</h3>
+<p>What they are:</p>
+<p>Blueprints group related routes.</p>
+<p>Where used:</p>
+<ul>
+<li><code>auth_bp</code></li>
+<li><code>photo_bp</code></li>
+<li><code>search_bp</code></li>
+<li><code>event_bp</code></li>
+<li>others.</li>
+</ul>
+<p>Why used:</p>
+<p>To keep route files modular and maintainable.</p>
+<h3>Flask-CORS</h3>
+<p>What it is:</p>
+<p>CORS controls which frontend origins can call the backend.</p>
+<p>Where used:</p>
+<ul>
+<li><code>CORS(app, resources=...)</code> in <code>app.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>The frontend may run at <code>localhost:5500</code> or <code>localhost:3000</code>, while backend runs at <code>localhost:5000</code>. Browsers block cross-origin requests unless CORS allows them.</p>
+<h3>Flask-JWT-Extended</h3>
+<p>What it is:</p>
+<p>A Flask extension for JWT authentication.</p>
+<p>Where used:</p>
+<ul>
+<li><code>auth_routes.py</code></li>
+<li><code>@jwt_required()</code></li>
+<li><code>get_jwt_identity()</code></li>
+</ul>
+<p>Why used:</p>
+<p>To protect routes and identify the current user.</p>
+<h3>Flask-Limiter</h3>
+<p>What it is:</p>
+<p>Rate limiting extension.</p>
+<p>Where used:</p>
+<ul>
+<li>Auth routes use <code>@limiter.limit(...)</code>.</li>
+</ul>
+<p>Why used:</p>
+<p>To prevent too many login/register attempts in a short time.</p>
+<h3>SQLAlchemy</h3>
+<p>What it is:</p>
+<p>Python ORM for database operations.</p>
+<p>ORM explanation:</p>
+<p>ORM means Object Relational Mapper. It lets us use Python classes like <code>User</code> and <code>Photo</code> instead of writing SQL for every operation.</p>
+<p>Where used:</p>
+<ul>
+<li><code>backend/models/*.py</code></li>
+<li>route queries like <code>Photo.query.filter(...)</code></li>
+</ul>
+<p>Why used:</p>
+<p>It simplifies database access and keeps code readable.</p>
+<h3>Flask-Migrate And Alembic</h3>
+<p>What they are:</p>
+<p>Migration tools for database schema changes.</p>
+<p>Migration explanation:</p>
+<p>A migration is like a version history for database structure.</p>
+<p>Where used:</p>
+<ul>
+<li><code>backend/migrations/</code></li>
+</ul>
+<p>Why used:</p>
+<p>As the project evolves, tables and columns change. Migrations apply these changes safely.</p>
+<h3>PostgreSQL</h3>
+<p>What it is:</p>
+<p>Production-grade relational database.</p>
+<p>Where used:</p>
+<ul>
+<li>Stores users, photos, events, jobs, and vector embeddings.</li>
+</ul>
+<p>Why used:</p>
+<p>It supports strong data relationships and pgvector.</p>
+<h3>pgvector</h3>
+<p>What it is:</p>
+<p>PostgreSQL extension for vector storage and similarity search.</p>
+<p>Where used:</p>
+<ul>
+<li><code>Photo.clip_vector_pg</code></li>
+<li><code>backend/vector_search.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>To perform semantic search using CLIP embeddings directly inside PostgreSQL.</p>
+<p>Alternative:</p>
+<ul>
+<li>FAISS</li>
+<li>Pinecone</li>
+<li>Milvus</li>
+<li>Weaviate</li>
+</ul>
+<p>Why pgvector was selected:</p>
+<p>It keeps relational data and vector search in one PostgreSQL database, simplifying deployment and backup.</p>
+<h3>Docker Compose</h3>
+<p>What it is:</p>
+<p>Tool to run services like PostgreSQL using containers.</p>
+<p>Where used:</p>
+<ul>
+<li><code>docker-compose.yml</code></li>
+</ul>
+<p>Why used:</p>
+<p>To start PostgreSQL + pgvector easily with one command.</p>
+<h3>PyTorch</h3>
+<p>What it is:</p>
+<p>Machine learning library for running neural networks.</p>
+<p>Where used:</p>
+<ul>
+<li><code>ml/scene_classifier.py</code></li>
+<li><code>ml/clip_search.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>Both ResNet and CLIP model inference run with PyTorch.</p>
+<h3>torchvision</h3>
+<p>What it is:</p>
+<p>PyTorch library for computer vision models and image transforms.</p>
+<p>Where used:</p>
+<ul>
+<li>ResNet-18 model creation.</li>
+<li>Image resize, crop, tensor conversion, normalization.</li>
+</ul>
+<h3>ResNet-18 Places365</h3>
+<p>What it is:</p>
+<p>A convolutional neural network trained to classify scene categories.</p>
+<p>Where used:</p>
+<ul>
+<li><code>ml/scene_classifier.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>Places365 is scene-focused. It is better for labels like airport, classroom, kitchen, and beach than a generic object classifier.</p>
+<h3>CLIP</h3>
+<p>What it is:</p>
+<p>OpenAI model that connects text and images in the same embedding space.</p>
+<p>Where used:</p>
+<ul>
+<li><code>ml/clip_search.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>It enables natural-language photo search.</p>
+<h3>Pillow</h3>
+<p>What it is:</p>
+<p>Python image processing library.</p>
+<p>Where used:</p>
+<ul>
+<li>Opening images.</li>
+<li>Reading EXIF metadata.</li>
+<li>Creating duplicate hashes.</li>
+<li>Preprocessing images for ML.</li>
+</ul>
+<h3>NumPy</h3>
+<p>What it is:</p>
+<p>Library for numerical arrays.</p>
+<p>Where used:</p>
+<ul>
+<li>Vector conversion and normalization.</li>
+<li>Embedding handling.</li>
+</ul>
+<h3>scikit-learn</h3>
+<p>What it is:</p>
+<p>Machine learning utilities library.</p>
+<p>Where used:</p>
+<ul>
+<li><code>ml/event_organizer.py</code></li>
+<li>KMeans, PCA, silhouette score, normalization.</li>
+</ul>
+<p>Note:</p>
+<p>The current active <code>/events/organize</code> flow uses category matching, while <code>event_organizer.py</code> contains richer clustering helpers.</p>
+<h3>Werkzeug</h3>
+<p>What it is:</p>
+<p>Web utility library used by Flask.</p>
+<p>Where used:</p>
+<ul>
+<li>Password hashing/checking.</li>
+<li>Secure filename handling.</li>
+</ul>
+<h3>itsdangerous</h3>
+<p>What it is:</p>
+<p>Library for signed tokens.</p>
+<p>Where used:</p>
+<ul>
+<li><code>backend/share_utils.py</code></li>
+</ul>
+<p>Why used:</p>
+<p>It creates share tokens that cannot be easily tampered with.</p>
+<div class="section-rule"></div>
+<h2>13. Module-Wise Review Notes</h2>
+<h3>Authentication Module</h3>
+<p>What to say:</p>
+<p>&quot;The authentication module lets users register and log in. Passwords are hashed before storage. The backend returns JWT access and refresh tokens. Protected APIs use <code>@jwt_required()</code> so each user can access only their own photos.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: Why hash passwords?</p>
+<p>A: We should never store plain passwords. Hashing stores a transformed value, so even if the database is exposed, actual passwords are not directly visible.</p>
+<p>Q: Why JWT?</p>
+<p>A: JWT is stateless. The backend can verify the token without storing session data for every request.</p>
+<h3>Upload And Processing Module</h3>
+<p>What to say:</p>
+<p>&quot;Upload stores files on disk and metadata in PostgreSQL. AI processing is handled in a background job, so the UI does not freeze while CLIP and ResNet process the photos.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: Why background jobs?</p>
+<p>A: AI inference can be slow. Jobs allow the API to return quickly and the frontend can poll progress.</p>
+<p>Q: Where are photos stored?</p>
+<p>A: Actual image files are stored in <code>backend/uploads</code>, while metadata and AI results are stored in PostgreSQL.</p>
+<h3>Search Module</h3>
+<p>What to say:</p>
+<p>&quot;Search is semantic, not only keyword-based. CLIP converts both photos and text into vectors. pgvector finds photo vectors close to the query vector.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: What is semantic search?</p>
+<p>A: It searches by meaning. For example, &quot;beach trip&quot; can find beach images even if the file name does not contain beach.</p>
+<p>Q: Why pgvector?</p>
+<p>A: It allows vector similarity search inside PostgreSQL, so we do not need a separate vector database.</p>
+<h3>Event Module</h3>
+<p>What to say:</p>
+<p>&quot;Event albums group ready photos into broader scene-based categories like Vacation &amp; Outdoors, Campus &amp; Learning, and Food &amp; Dining. Users can also merge, split, rename, move, export, and share albums.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: How are events created?</p>
+<p>A: The backend takes ready photos without an event, maps their AI scene labels to broader categories, creates or reuses matching albums, and assigns photos.</p>
+<h3>Duplicate Module</h3>
+<p>What to say:</p>
+<p>&quot;Duplicate detection uses SHA-256 for exact copies and dHash for visually similar photos. Exact duplicates have the same file hash. Similar photos have small perceptual hash distance.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: Why use both SHA-256 and dHash?</p>
+<p>A: SHA-256 catches exact file copies. dHash can catch near duplicates, such as resized or slightly changed photos.</p>
+<h3>Timeline Module</h3>
+<p>What to say:</p>
+<p>&quot;Timeline groups photos by date. It prefers EXIF capture time from the photo file, and falls back to upload time if EXIF is missing.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: Why use EXIF?</p>
+<p>A: EXIF gives the actual camera capture time, which is more meaningful than upload time for timeline browsing.</p>
+<h3>Sharing And Export Module</h3>
+<p>What to say:</p>
+<p>&quot;Users can share selected photos or albums using signed expiring tokens. Export creates ZIP files with photos and a manifest JSON.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: How do share links stay safe?</p>
+<p>A: The token is signed using the secret key and has an expiration time. The backend verifies the token before serving shared content.</p>
+<h3>Admin Health Module</h3>
+<p>What to say:</p>
+<p>&quot;The health page is useful for demos and operations. It checks database connection, pgvector readiness, model assets, counts, and backups.&quot;</p>
+<p>Likely questions:</p>
+<p>Q: Why do we need a health page?</p>
+<p>A: It helps quickly verify that all important subsystems are ready before a demo or review.</p>
+<div class="section-rule"></div>
+<h2>14. Limitations And Future Improvements</h2>
+<h3>Current Limitations</h3>
+<ol>
+<li>Background jobs use an in-process thread pool.</li>
+<li>If the backend process stops, active in-memory jobs may stop.</li>
+<li>Admin routes should be protected before public deployment.</li>
+<li>First AI model load may be slow because models load lazily.</li>
+<li><code>memory://</code> rate limiting is fine locally but not for distributed production.</li>
+<li>Event organization currently uses category mapping in the active worker path; clustering helpers exist but are not the main active route behavior.</li>
+<li>Search depends on CLIP quality and available embeddings.</li>
+<li>Local disk uploads are fine for local/demo use but cloud storage is better for production.</li>
+</ol>
+<h3>Future Improvements</h3>
+<table>
+<thead><tr>
+<th>Improvement</th>
+<th>Benefit</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Celery or RQ worker queue</td>
+<td>Durable background jobs.</td>
+</tr>
+<tr>
+<td>Redis for rate limiting/jobs</td>
+<td>Production-ready coordination.</td>
+</tr>
+<tr>
+<td>Cloud object storage</td>
+<td>Scalable photo storage.</td>
+</tr>
+<tr>
+<td>Admin authentication</td>
+<td>Safer deployment.</td>
+</tr>
+<tr>
+<td>Face/person recognition</td>
+<td>Person-based albums.</td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>Search text inside images.</td>
+</tr>
+<tr>
+<td>Geo-location maps</td>
+<td>Browse photos by place.</td>
+</tr>
+<tr>
+<td>Better event clustering metrics</td>
+<td>Improve album quality.</td>
+</tr>
+<tr>
+<td>User feedback loop</td>
+<td>Learn from manual corrections.</td>
+</tr>
+<tr>
+<td>Dockerize full backend/frontend</td>
+<td>Easier deployment.</td>
+</tr>
+</tbody></table>
+<p>Professional answer:</p>
+<p>&quot;The project is strong for academic review because it demonstrates a complete AI full-stack workflow. For production, I would improve durability with a queue like Celery/RQ, add admin authorization, use cloud storage, and add monitoring.&quot;</p>
+<div class="section-rule"></div>
+<h2>15. Common Viva Questions And Answers</h2>
+<h3>1. What is your project?</h3>
+<p>MemoryLens is an AI-powered photo organizer. It helps users upload, classify, search, organize, browse, share, and clean duplicate photos using Flask, PostgreSQL, pgvector, CLIP, and ResNet Places365.</p>
+<h3>2. What problem does it solve?</h3>
+<p>It solves the problem of manually organizing large photo collections. Users can find photos by meaning, browse by timeline, clean duplicates, and group photos into albums.</p>
+<h3>3. Who are the users?</h3>
+<p>Any user with many photos, such as students, families, photographers, and project teams.</p>
+<h3>4. What is the main AI part?</h3>
+<p>The main AI parts are scene classification using ResNet-18 Places365 and semantic search using CLIP embeddings.</p>
+<h3>5. What is CLIP?</h3>
+<p>CLIP is a model that represents text and images in the same vector space. This allows text queries to match relevant images.</p>
+<h3>6. What is a vector embedding?</h3>
+<p>An embedding is a list of numbers that represents meaning. In this project, each photo has a 512-dimensional CLIP vector.</p>
+<h3>7. What is pgvector?</h3>
+<p>pgvector is a PostgreSQL extension that stores vectors and supports similarity search.</p>
+<h3>8. Why did you use PostgreSQL?</h3>
+<p>PostgreSQL supports relational data, migrations, foreign keys, and pgvector, so it can store both normal metadata and search embeddings.</p>
+<h3>9. How is search performed?</h3>
+<p>The query is converted into a CLIP text embedding. pgvector compares it with stored image embeddings and returns the closest photos.</p>
+<h3>10. What is scene classification?</h3>
+<p>Scene classification predicts the environment shown in a photo, such as beach, office, classroom, or kitchen.</p>
+<h3>11. Why use Places365?</h3>
+<p>Places365 is trained on scene categories, which matches the goal of organizing photos by place or environment.</p>
+<h3>12. How is a photo stored?</h3>
+<p>The actual file is saved in <code>backend/uploads</code>. Metadata, scene, hash, vector, and owner information are stored in PostgreSQL.</p>
+<h3>13. Why not store images directly in the database?</h3>
+<p>Large binary files are better stored in a file system or object storage. The database stores metadata and paths.</p>
+<h3>14. How do you protect user photos?</h3>
+<p>Photo file routes require JWT authentication and check that the photo belongs to the logged-in user.</p>
+<h3>15. What is JWT?</h3>
+<p>JWT is a signed token used to prove the user&#x27;s identity for API requests.</p>
+<h3>16. What is the difference between access and refresh tokens?</h3>
+<p>Access tokens are short-lived and used for API calls. Refresh tokens are longer-lived and used to get a new access token.</p>
+<h3>17. How do background jobs work?</h3>
+<p>The backend creates a job row, starts worker-thread processing, and returns job ID. The frontend polls <code>/jobs/&lt;id&gt;</code> to show progress.</p>
+<h3>18. Why are background jobs necessary?</h3>
+<p>AI processing can take time, so jobs prevent the browser from waiting too long.</p>
+<h3>19. How do duplicates work?</h3>
+<p>Exact duplicates are detected with SHA-256. Similar duplicates are detected with dHash distance.</p>
+<h3>20. What is dHash?</h3>
+<p>dHash is a perceptual image hash. It gives similar hashes to visually similar images.</p>
+<h3>21. What is EXIF?</h3>
+<p>EXIF is metadata inside image files, such as camera capture time.</p>
+<h3>22. How does timeline work?</h3>
+<p>Timeline groups photos by year, month, or day using capture time if available, otherwise upload time.</p>
+<h3>23. What is an event album?</h3>
+<p>An event album is a group of photos under a label, such as Vacation &amp; Outdoors or Campus &amp; Learning.</p>
+<h3>24. How are event albums created?</h3>
+<p>Ready photos are mapped from detailed scenes to broader categories and assigned to matching albums.</p>
+<h3>25. What is the difference between folders and events?</h3>
+<p>Folders are gallery organization labels. Events are album-style groupings for related photos.</p>
+<h3>26. What happens if photo processing fails?</h3>
+<p>The photo is marked <code>failed</code>, the error is stored, and the user can retry processing.</p>
+<h3>27. What is CORS?</h3>
+<p>CORS controls whether a browser frontend from one origin can call the backend from another origin.</p>
+<h3>28. Why do you use migrations?</h3>
+<p>Migrations track database schema changes and apply them safely across systems.</p>
+<h3>29. What is SQLAlchemy?</h3>
+<p>SQLAlchemy is an ORM that maps Python classes to database tables.</p>
+<h3>30. What is the strongest part of your project?</h3>
+<p>It is a complete end-to-end AI system with authentication, file storage, database design, vector search, background jobs, duplicate detection, sharing, backup, and a polished frontend.</p>
+<h3>31. What is the main limitation?</h3>
+<p>The in-process background worker is not durable for large production deployments.</p>
+<h3>32. How would you improve it?</h3>
+<p>I would use Celery or RQ with Redis, protect admin routes, use cloud storage, add OCR, face recognition, and deployment monitoring.</p>
+<h3>33. What is the role of <code>api.js</code>?</h3>
+<p>It centralizes API calls, token handling, refresh logic, downloads, protected image loading, and job polling.</p>
+<h3>34. What is the role of <code>background_tasks.py</code>?</h3>
+<p>It handles long-running photo processing and event organization jobs.</p>
+<h3>35. What is the role of <code>vector_search.py</code>?</h3>
+<p>It checks pgvector readiness and performs similarity search over stored photo embeddings.</p>
+<h3>36. What is the role of <code>ml_services.py</code>?</h3>
+<p>It adds the <code>ml</code> folder to Python path and lazily loads/caches ML functions.</p>
+<h3>37. Why lazy-load models?</h3>
+<p>Models are heavy. Lazy loading starts the app faster and loads models only when needed.</p>
+<h3>38. What is protected file delivery?</h3>
+<p>Images are served through authenticated Flask routes instead of public static URLs.</p>
+<h3>39. What is a share token?</h3>
+<p>A signed token that allows temporary public access to selected photos or albums.</p>
+<h3>40. What is a backup manifest?</h3>
+<p>A JSON file that records backup details such as counts, upload archive information, and warnings.</p>
+<div class="section-rule"></div>
+<h2>16. Quick Revision Summary</h2>
+<h3>One-Minute Project Explanation</h3>
+<p>MemoryLens is an AI-powered photo organizer. Users can log in, upload photos, and the backend processes them using CLIP and ResNet Places365. The photo files are stored locally, while metadata, scene labels, duplicate hashes, and CLIP embeddings are stored in PostgreSQL. pgvector enables semantic search, so users can search by meaning. The app also supports timeline browsing, folders, event albums, duplicate cleanup, sharing, export, backup, and health checks.</p>
+<h3>Architecture In One Line</h3>
+<p>Static HTML/CSS/JS frontend -&gt; shared <code>api.js</code> -&gt; Flask blueprints -&gt; service modules -&gt; PostgreSQL/pgvector + upload folder + ML models.</p>
+<h3>Upload Flow In One Line</h3>
+<p>Select photos -&gt; save files -&gt; create photo rows and job -&gt; background worker runs EXIF, CLIP, scene classifier, hashes -&gt; update database -&gt; frontend polls job -&gt; display results.</p>
+<h3>Search Flow In One Line</h3>
+<p>Text query -&gt; CLIP text vector -&gt; pgvector similarity with photo vectors -&gt; scene boost -&gt; ranked photo results.</p>
+<h3>Database In One Line</h3>
+<p><code>users</code> own <code>photos</code>, <code>events</code>, and <code>jobs</code>; photos may belong to events and contain AI metadata plus vector embeddings.</p>
+<h3>Technologies In One Line</h3>
+<p>Frontend uses HTML/CSS/JS, backend uses Flask, database uses PostgreSQL + pgvector, AI uses PyTorch, ResNet Places365, CLIP, Pillow, NumPy, and scikit-learn helpers.</p>
+<h3>Best Review Closing Statement</h3>
+<p>&quot;MemoryLens is not only an AI model demo. It is a full-stack system that connects UI, authentication, APIs, relational database design, vector search, file storage, background processing, and practical photo-management features into one complete application.&quot;</p>
+</body>
+</html>

@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+backend/uploads/
+*.db
+backend/backups/
+*.dump
+*.zip
+*.manifest.json
+
+# ML model weights (large files - download separately)
+ml/resnet18_places365.pth.tar
+ml/categories_places365.txt
+ml/*.pth
+ml/*.tar
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Private academic/report artifacts
+docs/*.docx
+docs/generate_final_report_docx.py
+docs/generate_project_proposal_docx.py

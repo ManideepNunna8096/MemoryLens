@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Search</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .search-hero { padding: 48px 0 32px; text-align: center; }
+    .search-bar-wrap {
+      max-width: 640px; margin: 24px auto 0;
+      display: flex; gap: 10px;
+    }
+    .search-bar-wrap .input { font-size: 16px; padding: 14px 20px; }
+    .search-bar-wrap .btn { padding: 14px 24px; flex-shrink: 0; }
+
+    .suggestions {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center; margin-top: 14px;
+    }
+    .suggestion {
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid var(--border); color: var(--text2);
+      font-size: 13px; cursor: pointer; transition: all 0.15s;
+    }
+    .suggestion:hover { border-color: var(--accent); color: var(--accent); }
+
+    .results-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .results-count { font-size: 14px; color: var(--text2); }
+
+    .photo-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .photo-card {
+      border-radius: 12px; overflow: hidden;
+      background: var(--bg2); border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .photo-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .photo-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .photo-card-info { padding: 10px 12px; }
+    .photo-card-scene { font-size: 13px; font-weight: 500; }
+    .photo-card-score { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+    .score-bar {
+      height: 3px; border-radius: 2px; margin-top: 6px;
+      background: var(--bg3); overflow: hidden;
+    }
+    .score-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link active" href="search.html">Search</a>
+      <a class="nav-link" href="events.html">Events</a>
+      <a class="nav-link" href="timeline.html">Timeline</a>
+      <a class="nav-link" href="duplicates.html">Duplicates</a>
+      <a class="nav-link" href="admin-health.html">Health</a>
+    </div>
+    <div class="nav-user">
+      <span id="nav-username"></span>
+      <div class="avatar" id="nav-avatar" onclick="clearToken()">U</div>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+      <div class="search-hero">
+        <h1 class="page-title">Search with natural language</h1>
+        <p class="page-subtitle">Powered by CLIP - describe any photo in plain words</p>
+
+        <div class="search-bar-wrap">
+          <input class="input" type="text" id="search-input"
+            placeholder='Try "beach photos with people" or "indoor kitchen"'/>
+          <button class="btn btn-primary" onclick="doSearch()">Search</button>
+        </div>
+
+        <div class="suggestions">
+          <span class="suggestion" onclick="quickSearch(this)">beach sunset</span>
+          <span class="suggestion" onclick="quickSearch(this)">people outdoor</span>
+          <span class="suggestion" onclick="quickSearch(this)">city street</span>
+          <span class="suggestion" onclick="quickSearch(this)">indoor kitchen</span>
+          <span class="suggestion" onclick="quickSearch(this)">forest nature</span>
+          <span class="suggestion" onclick="quickSearch(this)">office work</span>
+        </div>
+      </div>
+
+      <div id="results-section" style="display:none">
+        <div class="divider"></div>
+        <div class="results-header">
+          <h2 style="font-family:var(--font-head);font-size:18px" id="results-title">Results</h2>
+          <span class="results-count" id="results-count"></span>
+        </div>
+        <div class="photo-grid" id="results-grid"></div>
+      </div>
+
+      <div id="empty-msg" style="display:none">
+        <div class="empty-state">
+          <h3>No results found</h3>
+          <p>Try a different search - "beach", "office", "park with trees"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+  <script src="../js/api.js"></script>
+  <script src="../js/search.js"></script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Events</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .organize-banner {
+      background: linear-gradient(135deg, rgba(124,108,252,0.15), rgba(192,132,252,0.1));
+      border: 1px solid rgba(124,108,252,0.3);
+      border-radius: 16px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .banner-text h2 {
+      font-family: var(--font-head);
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .banner-text p {
+      color: var(--text2);
+      font-size: 14px;
+      max-width: 620px;
+    }
+
+    .organize-points {
+      margin-top: 12px;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+      color: var(--text2);
+      font-size: 13px;
+      max-width: 640px;
+    }
+
+    .event-tools {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .selection-meta {
+      font-size: 13px;
+      color: var(--text2);
+      margin-left: 4px;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .event-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .event-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .event-selected {
+      border-color: rgba(124,108,252,0.7);
+      box-shadow: 0 0 0 1px rgba(124,108,252,0.5);
+    }
+
+    .event-select-wrap {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      background: rgba(10,10,15,0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px 6px;
+    }
+
+    .event-thumb-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 140px 90px;
+      gap: 2px;
+      height: 232px;
+      overflow: hidden;
+    }
+
+    .event-thumb-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .event-thumb-grid img:first-child {
+      grid-row: span 2;
+    }
+
+    .event-thumb-placeholder {
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text3);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .event-info {
+      padding: 16px;
+    }
+
+    .event-name {
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .event-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text3);
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .event-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      border-color: var(--border-hover);
+    }
+
+    .action-danger {
+      color: #f87171;
+      border-color: rgba(248,113,113,0.4);
+      background: rgba(248,113,113,0.12);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 500;
+      display: none;
+      overflow-y: auto;
+      padding: 32px 20px;
+    }
+
+    .modal-overlay.open {
+      display: block;
+    }
+
+    .modal-box {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .modal-title-wrap h2 {
+      font-family: var(--font-head);
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .modal-title-wrap p {
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .modal-header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-content {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) 320px;
+      gap: 0;
+    }
+
+    .modal-main {
+      border-right: 1px solid var(--border);
+    }
+
+    .modal-grid {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .modal-photo {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 8px;
+      background: var(--bg3);
+      cursor: grab;
+    }
+
+    .modal-photo.dragging {
+      opacity: 0.55;
+      border-color: rgba(124,108,252,0.5);
+    }
+
+    .modal-photo img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .modal-photo-meta {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .modal-photo-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-photo-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .modal-photo-btn-danger {
+      color: #fca5a5;
+      border-color: rgba(248,113,113,0.35);
+      background: rgba(248,113,113,0.08);
+    }
+
+    .move-panel {
+      padding: 20px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .move-panel h3 {
+      font-family: var(--font-head);
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .move-panel p {
+      color: var(--text2);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .drop-targets {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .drop-target {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .drop-target.active {
+      border-color: rgba(124,108,252,0.5);
+      background: rgba(124,108,252,0.12);
+      transform: translateY(-1px);
+    }
+
+    .drop-target strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .drop-target span {
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    .modal-footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    @media (max-width: 980px) {
+      .modal-content {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-main {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link" href="search.html">Search</a>
+      <a class="nav-link active" href="events.html">Events</a>
+      <a class="nav-link" href="timeline.html">Timeline</a>
+      <a class="nav-link" href="duplicates.html">Duplicates</a>
+      <a class="nav-link" href="admin-health.html">Health</a>
+    </div>
+    <div class="nav-user">
+      <span id="nav-username"></span>
+      <div class="avatar" id="nav-avatar" onclick="clearToken()">U</div>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Event Albums</h1>
+        <p class="page-subtitle">Organize photos into matching albums first, then merge, split, export, share, and move them manually when needed.</p>
+      </div>
+
+      <div class="organize-banner">
+        <div class="banner-text">
+          <h2>Auto-organize new photos into existing albums</h2>
+          <p>Match each new photo to the closest album label first. Only create a new album when nothing suitable already exists.</p>
+          <ul class="organize-points">
+            <li>Fill matching albums first</li>
+            <li>Merge same-name duplicates into one canonical album</li>
+            <li>Create a new album only for leftovers</li>
+          </ul>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="organizePhotos()">
+          <span id="org-btn-text">Organize New Photos</span>
+        </button>
+      </div>
+
+      <div class="event-tools">
+        <input class="input" id="merge-label" placeholder="Merged event name (optional)"/>
+        <button class="btn btn-secondary" onclick="mergeSelectedEvents()">Merge Selected</button>
+        <button class="btn btn-ghost" onclick="clearSelectedEvents()">Clear Selection</button>
+        <span class="selection-meta" id="selection-meta">0 events selected</span>
+      </div>
+
+      <div class="events-grid" id="events-grid">
+        <div style="grid-column:1/-1;padding:60px 0;text-align:center;color:var(--text3)">
+          <div class="spinner" style="margin:0 auto 12px"></div>
+          Loading events...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="event-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h2 id="modal-title">Event Photos</h2>
+          <p id="modal-subtitle">Use drag-and-drop to move photos between albums, or split only when you want a separate album.</p>
+        </div>
+        <div class="modal-header-actions">
+          <button class="btn btn-secondary" onclick="exportActiveEvent()">Export Album</button>
+          <button class="btn btn-secondary" onclick="shareActiveEvent()">Share Album</button>
+          <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+
+      <div class="modal-content">
+        <div class="modal-main">
+          <div class="modal-grid" id="modal-grid"></div>
+        </div>
+
+        <aside class="move-panel">
+          <h3>Move Between Albums</h3>
+          <p>Select multiple photos, then drag one of them onto a destination album below. You can also move the selection with the quick action.</p>
+          <select class="input" id="move-target-select"></select>
+          <button class="btn btn-secondary" style="margin-top:10px;width:100%" onclick="moveSelectedPhotos()">Move Selected Photos</button>
+          <div class="drop-targets" id="drop-targets"></div>
+        </aside>
+      </div>
+
+      <div class="modal-footer">
+        <input class="input" id="split-label" placeholder="New split event name"/>
+        <button class="btn btn-secondary" onclick="splitSelectedPhotos()">Split Selected Photos</button>
+        <span class="selection-meta" id="split-meta">0 photos selected for split</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+  <script src="../js/api.js"></script>
+  <script src="../js/events.js"></script>
+</body>
+</html>

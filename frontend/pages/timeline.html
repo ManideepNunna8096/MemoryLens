@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MemoryLens - Timeline</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <style>
+    .timeline-hero {
+      padding: 44px 0 24px;
+    }
+
+    .timeline-toolbar {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .timeline-toggle {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-chip {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      border-radius: 999px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .timeline-chip.active {
+      background: rgba(124,108,252,0.16);
+      border-color: rgba(124,108,252,0.4);
+      color: var(--text);
+    }
+
+    .timeline-summary {
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .timeline-drilldown {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--bg2);
+    }
+
+    .timeline-drilldown.active {
+      display: flex;
+    }
+
+    .timeline-drilldown-copy {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .timeline-drilldown-copy strong {
+      color: var(--text);
+    }
+
+    .timeline-drilldown-back {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .timeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      padding-bottom: 40px;
+    }
+
+    .timeline-period {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: visible;
+    }
+
+    .period-header {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      background: rgba(8,8,12,0.92);
+      color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      text-align: left;
+      cursor: pointer;
+      position: sticky;
+      top: 76px;
+      z-index: 4;
+      backdrop-filter: blur(10px);
+    }
+
+    .period-header:hover {
+      background: rgba(14,14,22,0.96);
+    }
+
+    .period-label {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .period-meta {
+      color: var(--text2);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .period-toggle {
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .period-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .timeline-period.open .period-grid {
+      display: grid;
+    }
+
+    .period-preview {
+      padding: 18px;
+    }
+
+    .period-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .period-preview-year .period-preview-grid {
+      grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+      gap: 10px;
+    }
+
+    .period-preview-month .period-preview-grid {
+      grid-template-columns: repeat(auto-fill, minmax(102px, 1fr));
+      gap: 12px;
+    }
+
+    .period-preview-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 92px;
+    }
+
+    .period-preview-card img {
+      width: 100%;
+      height: 92px;
+      object-fit: cover;
+      display: block;
+      background: var(--bg3);
+    }
+
+    .period-preview-more {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(124,108,252,0.35);
+      background: rgba(124,108,252,0.12);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .period-preview-more span {
+      color: var(--text2);
+      font-weight: 600;
+    }
+
+    .period-preview-note {
+      color: var(--text2);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .timeline-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .timeline-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124,108,252,0.38);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.22);
+    }
+
+    .timeline-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      background: var(--bg3);
+      display: block;
+    }
+
+    .timeline-card-body {
+      padding: 14px;
+    }
+
+    .timeline-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .timeline-card-meta {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .timeline-card-badge {
+      display: inline-flex;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(124,108,252,0.16);
+      color: #cfc7ff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .empty-state {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--text2);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(3,3,7,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 24px;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: min(92vw, 980px);
+      max-height: 78vh;
+      border-radius: 18px;
+      object-fit: contain;
+      background: #0c0c12;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 28px;
+      right: 28px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(12,12,18,0.84);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .lightbox-info {
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      background: rgba(12,12,18,0.88);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px 16px;
+      min-width: min(88vw, 520px);
+      text-align: center;
+    }
+
+    .lightbox-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .lightbox-meta {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-hero {
+        padding-top: 28px;
+      }
+
+      .period-header {
+        top: 66px;
+        padding: 14px 15px;
+      }
+
+      .period-label {
+        font-size: 18px;
+      }
+
+      .period-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 14px;
+        gap: 12px;
+      }
+
+      .timeline-card img {
+        height: 150px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .timeline-toolbar {
+        padding: 16px;
+      }
+
+      .timeline-drilldown {
+        padding: 14px;
+      }
+
+      .period-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .lightbox-info {
+        width: calc(100vw - 28px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="gallery.html">Memory<span>Lens</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="upload.html">Upload</a>
+      <a class="nav-link" href="search.html">Search</a>
+      <a class="nav-link" href="events.html">Events</a>
+      <a class="nav-link active" href="timeline.html">Timeline</a>
+      <a class="nav-link" href="duplicates.html">Duplicates</a>
+      <a class="nav-link" href="admin-health.html">Health</a>
+    </div>
+    <div class="nav-user">
+      <span id="nav-username"></span>
+      <div class="avatar" id="nav-avatar" onclick="clearToken()">U</div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <section class="timeline-hero">
+      <h1 class="page-title">Timeline</h1>
+      <p class="page-subtitle">Browse photos by year, month, or day. Open a year to see its months, then open a month to see its days.</p>
+    </section>
+
+    <section class="timeline-toolbar">
+      <div class="timeline-toggle">
+        <button type="button" class="timeline-chip active" data-group="year">Year</button>
+        <button type="button" class="timeline-chip" data-group="month">Month</button>
+        <button type="button" class="timeline-chip" data-group="day">Day</button>
+      </div>
+      <div class="timeline-summary" id="timeline-summary">Loading timeline...</div>
+    </section>
+
+    <section class="timeline-drilldown" id="timeline-drilldown">
+      <div class="timeline-drilldown-copy" id="timeline-drilldown-copy"></div>
+      <button type="button" class="timeline-drilldown-back" id="timeline-drilldown-back">Back</button>
+    </section>
+
+    <section class="timeline-list" id="timeline-list"></section>
+  </div>
+
+  <div class="lightbox" id="timeline-lightbox" onclick="closeLightbox(event)">
+    <img class="lightbox-img" id="timeline-lightbox-img" alt=""/>
+    <button class="lightbox-close" onclick="closeLightbox(event)">Close</button>
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="timeline-lightbox-title"></div>
+      <div class="lightbox-meta" id="timeline-lightbox-meta"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/timeline.js"></script>
+</body>
+</html>
