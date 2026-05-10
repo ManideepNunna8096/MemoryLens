@@ -44,6 +44,8 @@ Thumbs.db
 *.log
 
 # Private academic/report artifacts
+docs/*
+!docs/MemoryLens_Beginner_Project_Guide_Clean.html
 docs/*.docx
 docs/generate_final_report_docx.py
 docs/generate_project_proposal_docx.py
